@@ -62,9 +62,15 @@ export function buildThumbnailUrl(fileId: string, size = 800): string {
   return `https://drive.google.com/thumbnail?id=${fileId}&sz=w${size}`;
 }
 
-/** Build a public web view URL for a Drive file */
+/** Build a direct image/video URL for embedding (works for public files) */
 export function buildWebViewUrl(fileId: string): string {
-  return `https://drive.google.com/file/d/${fileId}/view`;
+  // lh3.googleusercontent.com/d/ serves the actual file content directly
+  return `https://lh3.googleusercontent.com/d/${fileId}`;
+}
+
+/** Build a large preview URL for lightbox display */
+export function buildLargePreviewUrl(fileId: string): string {
+  return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1920`;
 }
 
 /** Build a public download URL for a Drive file */

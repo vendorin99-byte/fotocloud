@@ -213,6 +213,21 @@ export function GalleryClient({ gallery, token }: { gallery: GalleryData; token:
   );
 }
 
+// Extract Drive file ID from any Drive URL and build a direct image URL
+function getFullImageUrl(item: MediaItem): string {
+  // Try to extract file ID from thumbnailUrl: .../thumbnail?id=FILE_ID&...
+  const thumbMatch = item.thumbnailUrl?.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (thumbMatch) {
+    return `https://drive.google.com/thumbnail?id=${thumbMatch[1]}&sz=w1920`;
+  }
+  // Try webViewUrl: lh3.googleusercontent.com/d/FILE_ID or drive.google.com/file/d/FILE_ID/view
+  const lh3Match = item.webViewUrl?.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (lh3Match) {
+    return `https://drive.google.com/thumbnail?id=${lh3Match[1]}&sz=w1920`;
+  }
+  return item.thumbnailUrl ?? "";
+}
+
 // ── Lightbox ──────────────────────────────────────────────────────────────────
 
 function Lightbox({ item, token, canDownload, canComment, onClose, onReview, onComment }: {
@@ -235,7 +250,16 @@ function Lightbox({ item, token, canDownload, canComment, onClose, onReview, onC
           <video src={item.webViewUrl ?? undefined} controls className="max-w-full max-h-[85vh] rounded-xl" />
         ) : (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.webViewUrl ?? item.thumbnailUrl ?? ""} alt={item.name} className="max-w-full max-h-[85vh] object-contain rounded-xl" />
+          <img
+            src={getFullImageUrl(item)}
+            alt={item.name}
+            className="max-w-full max-h-[85vh] object-contain rounded-xl"
+            onError={(e) => {
+              // fallback ke thumbnail ukuran besar
+              const t = item.thumbnailUrl?.replace("sz=w800", "sz=w1920");
+              if (t) (e.target as HTMLImageElement).src = t;
+            }}
+          />
         )}
       </div>
 
