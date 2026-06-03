@@ -13,7 +13,7 @@ export default async function SettingsPage({
 
   const user = await prisma.user.findUnique({
     where: { id: session!.user.id },
-    select: { name: true, email: true, businessName: true, googleEmail: true, plan: true, planExpiresAt: true },
+    select: { name: true, email: true, businessName: true, plan: true, planExpiresAt: true },
   });
 
   const isPro = user?.plan === "pro" && (!user.planExpiresAt || user.planExpiresAt > new Date());
@@ -23,19 +23,14 @@ export default async function SettingsPage({
       <h1 className="text-2xl font-bold text-gray-900 mb-1">Pengaturan Akun</h1>
       <p className="text-sm text-gray-500 mb-8">Kelola profil studio dan integrasi penyimpanan cloud Anda.</p>
 
-      {sp.success === "google_connected" && (
+      {sp.success && (
         <div className="mb-6 bg-green-50 border border-green-100 text-green-700 text-sm px-4 py-3 rounded-xl">
-          Google Drive berhasil terhubung!
-        </div>
-      )}
-      {sp.error && (
-        <div className="mb-6 bg-red-50 border border-red-100 text-red-600 text-sm px-4 py-3 rounded-xl">
-          {sp.error === "google_denied" ? "Akses Google Drive ditolak" : "Gagal menghubungkan Google Drive"}
+          Perubahan berhasil disimpan.
         </div>
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left: main settings */}
+        {/* Left */}
         <div className="lg:col-span-2 space-y-5">
           {/* Profile */}
           <div className="bg-white border border-gray-200 rounded-2xl p-6">
@@ -48,80 +43,69 @@ export default async function SettingsPage({
             <div className="space-y-4">
               <div>
                 <label className="block text-xs text-gray-500 mb-1.5">Nama Lengkap</label>
-                <input
-                  defaultValue={user?.name ?? ""}
-                  className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-all"
-                  readOnly
-                />
+                <input defaultValue={user?.name ?? ""} readOnly
+                  className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 text-sm text-gray-700" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1.5">Email Bisnis</label>
-                  <input
-                    defaultValue={user?.email ?? ""}
-                    className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-all"
-                    readOnly
-                  />
+                  <label className="block text-xs text-gray-500 mb-1.5">Email</label>
+                  <input defaultValue={user?.email ?? ""} readOnly
+                    className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 text-sm text-gray-700" />
                 </div>
                 <div>
                   <label className="block text-xs text-gray-500 mb-1.5">Nama Studio</label>
-                  <input
-                    defaultValue={user?.businessName ?? ""}
-                    placeholder="Nama studio Anda"
-                    className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-all"
-                    readOnly
-                  />
+                  <input defaultValue={user?.businessName ?? ""} placeholder="Nama studio" readOnly
+                    className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 text-sm text-gray-700 placeholder-gray-400" />
                 </div>
               </div>
-              <button className="bg-gray-900 text-white text-sm font-medium px-5 py-2.5 rounded-xl hover:bg-gray-700 transition-colors">
-                Simpan Perubahan
-              </button>
             </div>
           </div>
 
-          {/* Google Drive */}
+          {/* Google Drive cara pakai */}
           <div className="bg-white border border-gray-200 rounded-2xl p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-base font-semibold text-gray-900 flex items-center gap-2">
-                <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                Integrasi Penyimpanan
-              </h2>
-              {user?.googleEmail && (
-                <span className="text-xs font-semibold text-green-600 bg-green-50 border border-green-100 px-2.5 py-1 rounded-full">
-                  ● TERHUBUNG
-                </span>
-              )}
-            </div>
-
-            <div className="border border-gray-200 rounded-xl p-4 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 bg-white border border-gray-200 rounded-lg flex items-center justify-center shadow-sm">
-                  <svg viewBox="0 0 24 24" className="w-5 h-5">
-                    <path d="M4.433 22l4.267-7.4H22l-4.267 7.4H4.433zm3.567-9L2 4h8.567l6 9H8zm5.567-9h8.566L16 13H7.433L13.567 4z" fill="#4285F4" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Google Drive</p>
-                  <p className="text-xs text-gray-500">{user?.googleEmail ?? "Belum terhubung"}</p>
-                </div>
-              </div>
-              <a href="/api/auth/google"
-                className="text-sm font-medium text-gray-600 border border-gray-300 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors">
-                {user?.googleEmail ? "Ubah Akun" : "Hubungkan"}
-              </a>
-            </div>
-
-            <p className="text-xs text-gray-400 mt-3">
-              Penyimpanan ini digunakan untuk backup otomatis semua sesi foto klien Anda secara real-time.
+            <h2 className="text-base font-semibold text-gray-900 mb-1 flex items-center gap-2">
+              <svg viewBox="0 0 24 24" className="w-4 h-4">
+                <path d="M4.433 22l4.267-7.4H22l-4.267 7.4H4.433zm3.567-9L2 4h8.567l6 9H8zm5.567-9h8.566L16 13H7.433L13.567 4z" fill="#4285F4" />
+              </svg>
+              Google Drive Integration
+            </h2>
+            <p className="text-xs text-gray-500 mb-5">
+              FotoCloud membaca foto dari folder Google Drive yang Anda bagikan. Tidak perlu login Google.
             </p>
+
+            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-4">
+              <p className="text-sm font-semibold text-blue-900 mb-3">Cara menghubungkan folder Drive:</p>
+              <ol className="space-y-2.5">
+                {[
+                  { n: "1", text: 'Buka Google Drive → masuk ke folder foto klien' },
+                  { n: "2", text: 'Klik kanan folder → "Share" → "Anyone with the link" → pilih "Viewer"' },
+                  { n: "3", text: 'Klik "Copy link" — URL akan berisi /folders/...' },
+                  { n: "4", text: 'Paste URL tersebut di halaman detail project' },
+                  { n: "5", text: 'Klik tombol "Sync Drive" — semua foto otomatis tampil di galeri' },
+                ].map((s) => (
+                  <li key={s.n} className="flex items-start gap-3 text-sm text-blue-800">
+                    <span className="w-5 h-5 rounded-full bg-blue-200 text-blue-800 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
+                      {s.n}
+                    </span>
+                    {s.text}
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            <div className="bg-amber-50 border border-amber-100 rounded-xl p-3 flex gap-2">
+              <svg className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+              <p className="text-xs text-amber-700">
+                Pastikan folder di-set <strong>"Anyone with the link"</strong> agar foto bisa tampil. Folder private tidak akan bisa dibaca.
+              </p>
+            </div>
           </div>
         </div>
 
         {/* Right sidebar */}
         <div className="space-y-4">
-          {/* Help */}
           <div className="bg-gray-900 text-white rounded-2xl p-5">
             <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center mb-3">
               <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -132,17 +116,14 @@ export default async function SettingsPage({
             <p className="text-xs text-gray-400 mb-4 leading-relaxed">
               Pelajari cara mengoptimalkan alur kerja studio Anda dengan panduan lengkap kami.
             </p>
-            <Link href="#" className="text-sm font-medium text-white hover:text-gray-300 transition-colors flex items-center gap-1">
+            <Link href="#" className="text-sm font-medium text-white flex items-center gap-1 hover:text-gray-300">
               Buka Pusat Bantuan →
             </Link>
           </div>
 
-          {/* Plan */}
           <div className="bg-white border border-gray-200 rounded-2xl p-5">
             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Paket Saat Ini</p>
-            <div className="flex items-baseline gap-1 mb-1">
-              <span className="text-2xl font-bold text-gray-900">{isPro ? "Pro" : "Gratis"}</span>
-            </div>
+            <p className="text-2xl font-bold text-gray-900 mb-1">{isPro ? "Pro" : "Gratis"}</p>
             <p className="text-xs text-gray-500 mb-4">
               {isPro ? "Akses penuh ke semua fitur" : "1 project · Fitur dasar"}
             </p>

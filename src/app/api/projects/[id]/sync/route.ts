@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { syncProjectMedia } from "@/lib/google/drive";
 
 export async function POST(
@@ -12,8 +13,14 @@ export async function POST(
 
   const { id } = await params;
 
+  // Verify ownership
+  const project = await prisma.project.findFirst({
+    where: { id, photographerId: session.user.id },
+  });
+  if (!project) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
   try {
-    const result = await syncProjectMedia(session.user.id, id);
+    const result = await syncProjectMedia(id);
     return NextResponse.json({ success: true, ...result });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Sync gagal";

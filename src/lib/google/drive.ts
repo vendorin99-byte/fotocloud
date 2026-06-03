@@ -1,108 +1,87 @@
-import { google } from "googleapis";
 import { prisma } from "@/lib/prisma";
-import { refreshGoogleToken } from "@/lib/google/oauth";
 import { deriveMimeType } from "@/lib/utils/drive-url";
 
-const SUPPORTED_MIME_TYPES = [
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/gif",
-  "image/heic",
-  "image/heif",
-  "video/mp4",
-  "video/quicktime",
-  "video/x-msvideo",
-  "video/webm",
-  "video/x-matroska",
+const DRIVE_API = "https://www.googleapis.com/drive/v3";
+const API_KEY = process.env.GOOGLE_API_KEY!;
+
+const SUPPORTED_MIME = [
+  "image/jpeg", "image/png", "image/webp", "image/gif", "image/heic", "image/heif",
+  "video/mp4", "video/quicktime", "video/x-msvideo", "video/webm", "video/x-matroska",
 ];
-
-async function getValidAccessToken(userId: string): Promise<string> {
-  const user = await prisma.user.findUniqueOrThrow({
-    where: { id: userId },
-    select: {
-      googleAccessToken: true,
-      googleRefreshToken: true,
-      googleTokenExpiry: true,
-    },
-  });
-
-  if (!user.googleAccessToken || !user.googleRefreshToken) {
-    throw new Error("Google Drive not connected");
-  }
-
-  const isExpired =
-    !user.googleTokenExpiry || user.googleTokenExpiry <= new Date();
-
-  if (isExpired) {
-    const refreshed = await refreshGoogleToken(user.googleRefreshToken);
-    await prisma.user.update({
-      where: { id: userId },
-      data: {
-        googleAccessToken: refreshed.accessToken,
-        googleTokenExpiry: refreshed.expiresAt,
-      },
-    });
-    return refreshed.accessToken;
-  }
-
-  return user.googleAccessToken;
-}
 
 export interface DriveFile {
   id: string;
   name: string;
   mimeType: string;
-  thumbnailLink?: string;
-  webViewLink?: string;
   size?: string;
   imageMediaMetadata?: { width?: number; height?: number };
   videoMediaMetadata?: { durationMillis?: string; width?: number; height?: number };
   createdTime?: string;
 }
 
-export async function listFilesInFolder(
-  userId: string,
-  folderId: string
-): Promise<DriveFile[]> {
-  const accessToken = await getValidAccessToken(userId);
-
-  const auth = new google.auth.OAuth2();
-  auth.setCredentials({ access_token: accessToken });
-
-  const drive = google.drive({ version: "v3", auth });
-
+/** List all supported media files in a public Drive folder using API key */
+export async function listFilesInFolder(folderId: string): Promise<DriveFile[]> {
   const files: DriveFile[] = [];
   let pageToken: string | undefined;
 
+  const mimeFilter = SUPPORTED_MIME.map((m) => `mimeType='${m}'`).join(" or ");
+
   do {
-    const res = await drive.files.list({
-      q: `'${folderId}' in parents and trashed=false and (${SUPPORTED_MIME_TYPES.map((m) => `mimeType='${m}'`).join(" or ")})`,
-      fields:
-        "nextPageToken, files(id, name, mimeType, thumbnailLink, webViewLink, size, imageMediaMetadata, videoMediaMetadata, createdTime)",
-      pageSize: 100,
+    const params = new URLSearchParams({
+      key: API_KEY,
+      q: `'${folderId}' in parents and trashed=false and (${mimeFilter})`,
+      fields: "nextPageToken, files(id, name, mimeType, size, imageMediaMetadata, videoMediaMetadata, createdTime)",
+      pageSize: "100",
       ...(pageToken ? { pageToken } : {}),
     });
 
-    const batch = (res.data.files ?? []) as DriveFile[];
-    files.push(...batch);
-    pageToken = res.data.nextPageToken ?? undefined;
+    const res = await fetch(`${DRIVE_API}/files?${params}`);
+
+    if (!res.ok) {
+      const err = await res.json();
+      const msg = err?.error?.message ?? "Drive API error";
+      // Provide clear error if folder is not public
+      if (res.status === 403 || res.status === 404) {
+        throw new Error(
+          `Folder tidak bisa diakses. Pastikan folder Drive sudah di-set ke "Anyone with the link can view". (${msg})`
+        );
+      }
+      throw new Error(msg);
+    }
+
+    const data = await res.json();
+    files.push(...(data.files ?? []));
+    pageToken = data.nextPageToken;
   } while (pageToken);
 
   return files;
 }
 
+/** Build a stable public thumbnail URL for a Drive file */
+export function buildThumbnailUrl(fileId: string, size = 800): string {
+  return `https://drive.google.com/thumbnail?id=${fileId}&sz=w${size}`;
+}
+
+/** Build a public web view URL for a Drive file */
+export function buildWebViewUrl(fileId: string): string {
+  return `https://drive.google.com/file/d/${fileId}/view`;
+}
+
+/** Build a public download URL for a Drive file */
+export function buildDownloadUrl(fileId: string): string {
+  return `https://drive.google.com/uc?export=download&id=${fileId}`;
+}
+
 export async function syncProjectMedia(
-  userId: string,
   projectId: string
 ): Promise<{ added: number; removed: number }> {
   const project = await prisma.project.findFirst({
-    where: { id: projectId, photographerId: userId },
-    select: { driveFolderId: true },
+    where: { id: projectId },
+    select: { driveFolderId: true, photographerId: true },
   });
 
   if (!project?.driveFolderId) {
-    throw new Error("Drive folder not linked to this project");
+    throw new Error("Drive folder belum dihubungkan ke project ini");
   }
 
   await prisma.project.update({
@@ -111,15 +90,14 @@ export async function syncProjectMedia(
   });
 
   try {
-    const driveFiles = await listFilesInFolder(userId, project.driveFolderId);
+    const driveFiles = await listFilesInFolder(project.driveFolderId);
     const driveFileIds = new Set(driveFiles.map((f) => f.id));
-
     let added = 0;
 
     for (const file of driveFiles) {
       const type = deriveMimeType(file.mimeType);
-      const meta = file.imageMediaMetadata;
-      const videoMeta = file.videoMediaMetadata;
+      const imgMeta = file.imageMediaMetadata;
+      const vidMeta = file.videoMediaMetadata;
 
       const existing = await prisma.mediaItem.findUnique({
         where: { projectId_driveFileId: { projectId, driveFileId: file.id } },
@@ -132,35 +110,27 @@ export async function syncProjectMedia(
             name: file.name,
             mimeType: file.mimeType,
             type,
-            thumbnailUrl: file.thumbnailLink ?? null,
-            webViewUrl: file.webViewLink ?? null,
-            downloadUrl: `https://drive.google.com/uc?export=download&id=${file.id}`,
+            thumbnailUrl: buildThumbnailUrl(file.id),
+            webViewUrl: buildWebViewUrl(file.id),
+            downloadUrl: buildDownloadUrl(file.id),
             fileSize: file.size ? BigInt(file.size) : null,
-            width: meta?.width ?? videoMeta?.width ?? null,
-            height: meta?.height ?? videoMeta?.height ?? null,
-            durationSecs: videoMeta?.durationMillis
-              ? Math.floor(Number(videoMeta.durationMillis) / 1000)
+            width: imgMeta?.width ?? vidMeta?.width ?? null,
+            height: imgMeta?.height ?? vidMeta?.height ?? null,
+            durationSecs: vidMeta?.durationMillis
+              ? Math.floor(Number(vidMeta.durationMillis) / 1000)
               : null,
             takenAt: file.createdTime ? new Date(file.createdTime) : null,
             projectId,
           },
         });
         added++;
-      } else {
-        // Refresh thumbnail URL (Drive thumbnails expire)
-        await prisma.mediaItem.update({
-          where: { id: existing.id },
-          data: { thumbnailUrl: file.thumbnailLink ?? null },
-        });
       }
+      // Thumbnail URL is stable (no expiry) so no refresh needed
     }
 
-    // Mark items no longer in Drive
+    // Remove items no longer in Drive
     const removed = await prisma.mediaItem.deleteMany({
-      where: {
-        projectId,
-        driveFileId: { notIn: Array.from(driveFileIds) },
-      },
+      where: { projectId, driveFileId: { notIn: Array.from(driveFileIds) } },
     });
 
     await prisma.project.update({
