@@ -29,6 +29,8 @@ export function TokenManager({
   const [tokens, setTokens] = useState(initialTokens);
   const [showForm, setShowForm] = useState(false);
   const [newLabel, setNewLabel] = useState("");
+  const [newCanDownload, setNewCanDownload] = useState(true);
+  const [newCanComment, setNewCanComment] = useState(true);
   const [creating, setCreating] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -52,45 +54,41 @@ export function TokenManager({
     const res = await fetch(`/api/projects/${projectId}/tokens`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ label: newLabel || undefined }),
+      body: JSON.stringify({
+        label: newLabel || undefined,
+        canDownload: newCanDownload,
+        canComment: newCanComment,
+      }),
     });
     setCreating(false);
 
     if (res.ok) {
       const t = await res.json();
       setTokens((prev) => [
-        {
-          ...t,
-          reviewCount: 0,
-          commentCount: 0,
-          approvedCount: 0,
-          revisionCount: 0,
-        },
+        { ...t, reviewCount: 0, commentCount: 0, approvedCount: 0, revisionCount: 0 },
         ...prev,
       ]);
       setNewLabel("");
+      setNewCanDownload(true);
+      setNewCanComment(true);
       setShowForm(false);
     }
   }
 
-  async function toggleActive(tokenId: string, isActive: boolean) {
+  async function patchToken(tokenId: string, data: Partial<Token>) {
     const res = await fetch(`/api/projects/${projectId}/tokens/${tokenId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ isActive: !isActive }),
+      body: JSON.stringify(data),
     });
     if (res.ok) {
-      setTokens((prev) =>
-        prev.map((t) => (t.id === tokenId ? { ...t, isActive: !isActive } : t))
-      );
+      setTokens((prev) => prev.map((t) => (t.id === tokenId ? { ...t, ...data } : t)));
     }
   }
 
   async function deleteToken(tokenId: string) {
     if (!confirm("Hapus link ini? Klien tidak bisa mengaksesnya lagi.")) return;
-    const res = await fetch(`/api/projects/${projectId}/tokens/${tokenId}`, {
-      method: "DELETE",
-    });
+    const res = await fetch(`/api/projects/${projectId}/tokens/${tokenId}`, { method: "DELETE" });
     if (res.ok) {
       setTokens((prev) => prev.filter((t) => t.id !== tokenId));
       router.refresh();
@@ -100,7 +98,7 @@ export function TokenManager({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-500">{tokens.length} link aktif</p>
+        <p className="text-sm text-gray-500">{tokens.length} link klien</p>
         <button
           onClick={() => setShowForm((v) => !v)}
           className="bg-gray-900 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors"
@@ -109,9 +107,10 @@ export function TokenManager({
         </button>
       </div>
 
+      {/* Create form */}
       {showForm && (
-        <div className="bg-gray-50 border rounded-xl p-4 flex items-end gap-3">
-          <div className="flex-1">
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-4">
+          <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">
               Label <span className="text-gray-400">(opsional)</span>
             </label>
@@ -123,22 +122,50 @@ export function TokenManager({
               onKeyDown={(e) => e.key === "Enter" && createToken()}
             />
           </div>
-          <button
-            onClick={createToken}
-            disabled={creating}
-            className="bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 disabled:opacity-50 shrink-0"
-          >
-            {creating ? "Membuat..." : "Buat"}
-          </button>
-          <button
-            onClick={() => setShowForm(false)}
-            className="text-sm text-gray-500 hover:text-gray-900"
-          >
-            Batal
-          </button>
+
+          {/* Permissions */}
+          <div>
+            <p className="text-xs font-medium text-gray-600 mb-2">Izin klien</p>
+            <div className="flex gap-3">
+              <label className="flex items-center gap-2 cursor-pointer select-none">
+                <button
+                  type="button"
+                  onClick={() => setNewCanDownload((v) => !v)}
+                  className={`w-9 h-5 rounded-full transition-colors relative ${newCanDownload ? "bg-gray-900" : "bg-gray-300"}`}
+                >
+                  <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${newCanDownload ? "translate-x-4" : "translate-x-0.5"}`} />
+                </button>
+                <span className="text-sm text-gray-700">Download foto</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer select-none">
+                <button
+                  type="button"
+                  onClick={() => setNewCanComment((v) => !v)}
+                  className={`w-9 h-5 rounded-full transition-colors relative ${newCanComment ? "bg-gray-900" : "bg-gray-300"}`}
+                >
+                  <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${newCanComment ? "translate-x-4" : "translate-x-0.5"}`} />
+                </button>
+                <span className="text-sm text-gray-700">Komentar</span>
+              </label>
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <button
+              onClick={createToken}
+              disabled={creating}
+              className="bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 disabled:opacity-50"
+            >
+              {creating ? "Membuat..." : "Buat Link"}
+            </button>
+            <button onClick={() => setShowForm(false)} className="text-sm text-gray-500 hover:text-gray-900 px-3 py-2">
+              Batal
+            </button>
+          </div>
         </div>
       )}
 
+      {/* Token list */}
       {tokens.length === 0 ? (
         <div className="text-center py-8 text-gray-400 border-2 border-dashed rounded-xl text-sm">
           Belum ada link. Buat link untuk bagikan galeri ke klien.
@@ -146,27 +173,25 @@ export function TokenManager({
       ) : (
         <div className="space-y-3">
           {tokens.map((t) => (
-            <div
-              key={t.id}
-              className={`bg-white border rounded-xl p-4 ${
-                !t.isActive ? "opacity-60" : ""
-              }`}
-            >
+            <div key={t.id} className={`bg-white border border-gray-200 rounded-xl p-4 ${!t.isActive ? "opacity-60" : ""}`}>
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-medium text-sm text-gray-900">
                       {t.label || "Link tanpa label"}
                     </span>
                     {!t.isActive && (
-                      <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">
-                        Nonaktif
-                      </span>
+                      <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">Nonaktif</span>
                     )}
+                    {/* Permission badges */}
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${t.canDownload ? "bg-blue-50 text-blue-600" : "bg-gray-100 text-gray-400 line-through"}`}>
+                      Download
+                    </span>
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${t.canComment ? "bg-green-50 text-green-600" : "bg-gray-100 text-gray-400 line-through"}`}>
+                      Komentar
+                    </span>
                   </div>
-                  <p className="text-xs text-gray-400 mt-0.5 truncate">
-                    {galleryUrl(t)}
-                  </p>
+                  <p className="text-xs text-gray-400 mt-0.5 truncate">{galleryUrl(t)}</p>
                   <div className="flex items-center gap-3 mt-1.5 text-xs text-gray-500">
                     <span>{t.approvedCount} disetujui</span>
                     <span>{t.revisionCount} revisi</span>
@@ -181,8 +206,38 @@ export function TokenManager({
                   >
                     {copiedId === t.token ? "Tersalin!" : "Salin URL"}
                   </button>
+                </div>
+              </div>
+
+              {/* Controls row */}
+              <div className="mt-3 pt-3 border-t border-gray-100 flex items-center gap-4 flex-wrap">
+                {/* Toggle download */}
+                <label className="flex items-center gap-1.5 cursor-pointer select-none">
                   <button
-                    onClick={() => toggleActive(t.id, t.isActive)}
+                    type="button"
+                    onClick={() => patchToken(t.id, { canDownload: !t.canDownload })}
+                    className={`w-8 h-4 rounded-full transition-colors relative ${t.canDownload ? "bg-gray-800" : "bg-gray-300"}`}
+                  >
+                    <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full shadow transition-transform ${t.canDownload ? "translate-x-4" : "translate-x-0.5"}`} />
+                  </button>
+                  <span className="text-xs text-gray-600">Download</span>
+                </label>
+
+                {/* Toggle comment */}
+                <label className="flex items-center gap-1.5 cursor-pointer select-none">
+                  <button
+                    type="button"
+                    onClick={() => patchToken(t.id, { canComment: !t.canComment })}
+                    className={`w-8 h-4 rounded-full transition-colors relative ${t.canComment ? "bg-gray-800" : "bg-gray-300"}`}
+                  >
+                    <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full shadow transition-transform ${t.canComment ? "translate-x-4" : "translate-x-0.5"}`} />
+                  </button>
+                  <span className="text-xs text-gray-600">Komentar</span>
+                </label>
+
+                <div className="ml-auto flex items-center gap-3">
+                  <button
+                    onClick={() => patchToken(t.id, { isActive: !t.isActive })}
                     className="text-xs text-gray-500 hover:text-gray-900"
                   >
                     {t.isActive ? "Nonaktifkan" : "Aktifkan"}
