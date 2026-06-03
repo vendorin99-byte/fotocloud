@@ -6,6 +6,7 @@ import Link from "next/link";
 import { SyncButton } from "@/components/projects/SyncButton";
 import { TokenManager } from "@/components/tokens/TokenManager";
 import { MediaGrid } from "@/components/media/MediaGrid";
+import { CopyLinkButton } from "@/components/projects/CopyLinkButton";
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
@@ -158,15 +159,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                   {appUrl}/gallery/{project.accessTokens[0].token.slice(0, 20)}...
                 </p>
               </div>
-              <button
-                onClick={() => {}}
-                className="flex items-center gap-1.5 text-sm text-gray-700 border border-gray-300 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors w-full justify-center"
-              >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-                Copy Link
-              </button>
+              <CopyLinkButton
+                url={`${appUrl}/${project.accessTokens[0].slug ?? `gallery/${project.accessTokens[0].token}`}`}
+              />
             </>
           ) : (
             <p className="text-sm text-gray-400">Belum ada link klien</p>
