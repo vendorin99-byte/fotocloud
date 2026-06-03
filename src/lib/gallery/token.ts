@@ -74,7 +74,7 @@ export async function getGalleryByToken(
       canDownload: accessToken.canDownload,
       canComment: accessToken.canComment,
     },
-    mediaItems: mediaItems.map((item) => ({
+    mediaItems: mediaItems.map((item: typeof mediaItems[number]) => ({
       id: item.id,
       name: item.name,
       mimeType: item.mimeType,
@@ -91,7 +91,7 @@ export async function getGalleryByToken(
             revisionNote: item.reviews[0].revisionNote,
           }
         : null,
-      comments: item.comments.map((c) => ({
+      comments: item.comments.map((c: typeof item.comments[number]) => ({
         id: c.id,
         authorName: c.authorName,
         body: c.body,

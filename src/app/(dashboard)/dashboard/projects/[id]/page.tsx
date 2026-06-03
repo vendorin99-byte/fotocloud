@@ -115,7 +115,7 @@ export default async function ProjectDetailPage({
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Link Klien</h2>
         <TokenManager
           projectId={id}
-          initialTokens={project.accessTokens.map((t) => ({
+          initialTokens={project.accessTokens.map((t: typeof project.accessTokens[number]) => ({
             id: t.id,
             token: t.token,
             label: t.label,
@@ -126,8 +126,8 @@ export default async function ProjectDetailPage({
             createdAt: t.createdAt.toISOString(),
             reviewCount: t._count.reviews,
             commentCount: t._count.comments,
-            approvedCount: t.reviews.filter((r) => r.status === "approved").length,
-            revisionCount: t.reviews.filter((r) => r.status === "revision_requested").length,
+            approvedCount: t.reviews.filter((r: { status: string }) => r.status === "approved").length,
+            revisionCount: t.reviews.filter((r: { status: string }) => r.status === "revision_requested").length,
           }))}
         />
       </div>
