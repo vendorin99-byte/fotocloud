@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Testimonials } from "@/components/landing/Testimonials";
 
 export default function LandingPage() {
   return (
@@ -187,6 +188,9 @@ export default function LandingPage() {
           Daftar Sekarang
         </Link>
       </section>
+
+      {/* Testimonials */}
+      <Testimonials />
 
       {/* Footer */}
       <footer className="border-t border-gray-100 py-8 px-6">
