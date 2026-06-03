@@ -17,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id" className={`${geist.variable} h-full`}>
-      <body className="min-h-full bg-background text-foreground antialiased">
+      <body className="min-h-full bg-white text-gray-900 antialiased">
         <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
