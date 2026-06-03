@@ -204,6 +204,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           initialTokens={project.accessTokens.map((t: typeof project.accessTokens[number]) => ({
             id: t.id,
             token: t.token,
+            slug: t.slug,
             label: t.label,
             isActive: t.isActive,
             canDownload: t.canDownload,

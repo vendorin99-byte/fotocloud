@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { z } from "zod";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { slugify } from "@/lib/utils/slugify";
 
 async function getOwnedProject(projectId: string, userId: string) {
   return prisma.project.findFirst({
@@ -52,9 +53,17 @@ export async function POST(
     const body = await req.json();
     const data = createSchema.parse(body);
 
+    // Auto-generate slug from project name
+    const baseSlug = slugify(project.name);
+    // Ensure uniqueness by appending random suffix if slug taken
+    let slug = baseSlug;
+    const existing = await prisma.accessToken.findUnique({ where: { slug } });
+    if (existing) slug = `${baseSlug}-${Math.random().toString(36).slice(2, 6)}`;
+
     const token = await prisma.accessToken.create({
       data: {
         projectId: id,
+        slug,
         label: data.label,
         canDownload: data.canDownload,
         canComment: data.canComment,

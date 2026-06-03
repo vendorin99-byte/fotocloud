@@ -122,6 +122,7 @@ model Project {
 model AccessToken {
   id    String @id @default(cuid())
   token String @unique @default(cuid())
+  slug  String? @unique  // human-readable URL: domain/slug
   label String? // "Link Bride", "Link Wedding Planner"
 
   isActive    Boolean  @default(true)

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 interface Token {
   id: string;
   token: string;
+  slug: string | null;
   label: string | null;
   isActive: boolean;
   canDownload: boolean;
@@ -36,13 +37,13 @@ export function TokenManager({
       ? window.location.origin
       : process.env.NEXT_PUBLIC_APP_URL ?? "";
 
-  function galleryUrl(token: string) {
-    return `${appUrl}/gallery/${token}`;
+  function galleryUrl(t: Token) {
+    return t.slug ? `${appUrl}/${t.slug}` : `${appUrl}/gallery/${t.token}`;
   }
 
-  async function copyUrl(token: string) {
-    await navigator.clipboard.writeText(galleryUrl(token));
-    setCopiedId(token);
+  async function copyUrl(t: Token) {
+    await navigator.clipboard.writeText(galleryUrl(t));
+    setCopiedId(t.token);
     setTimeout(() => setCopiedId(null), 2000);
   }
 
@@ -164,7 +165,7 @@ export function TokenManager({
                     )}
                   </div>
                   <p className="text-xs text-gray-400 mt-0.5 truncate">
-                    {galleryUrl(t.token)}
+                    {galleryUrl(t)}
                   </p>
                   <div className="flex items-center gap-3 mt-1.5 text-xs text-gray-500">
                     <span>{t.approvedCount} disetujui</span>
@@ -175,7 +176,7 @@ export function TokenManager({
 
                 <div className="flex items-center gap-2 shrink-0">
                   <button
-                    onClick={() => copyUrl(t.token)}
+                    onClick={() => copyUrl(t)}
                     className="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg transition-colors"
                   >
                     {copiedId === t.token ? "Tersalin!" : "Salin URL"}
