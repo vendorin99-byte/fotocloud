@@ -113,8 +113,43 @@ model Project {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  accessTokens AccessToken[]
-  mediaItems   MediaItem[]
+  watermarkEnabled Boolean @default(false)
+
+  accessTokens  AccessToken[]
+  mediaItems    MediaItem[]
+  galleryViews  GalleryView[]
+}
+
+// ─── Gallery Analytics ────────────────────────────────────────────────────────
+
+model GalleryView {
+  id            String   @id @default(cuid())
+  projectId     String
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  accessTokenId String?
+  viewedAt      DateTime @default(now())
+}
+
+// ─── Testimonial ─────────────────────────────────────────────────────────────
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  role      String?
+  content   String   @db.Text
+  rating    Int      @default(5)
+  isVisible Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+// ─── App Settings (harga subscription dll) ───────────────────────────────────
+
+model AppSettings {
+  id               String @id @default("default")
+  proMonthlyPrice  Int    @default(99000)
+  proYearlyPrice   Int    @default(899000)
+  freeProjectLimit Int    @default(1)
+  updatedAt        DateTime @updatedAt
 }
 
 // ─── Access Token (unique URL per client/stakeholder) ────────────────────────
