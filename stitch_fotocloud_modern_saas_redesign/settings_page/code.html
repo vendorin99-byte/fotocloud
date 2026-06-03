@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#f0edee",
+                    "secondary-container": "#dce2f3",
+                    "outline": "#76777d",
+                    "error-container": "#ffdad6",
+                    "on-secondary-fixed-variant": "#404754",
+                    "primary-container": "#141b2b",
+                    "on-secondary-container": "#5e6572",
+                    "inverse-on-surface": "#f3f0f1",
+                    "tertiary-fixed-dim": "#dcc2a4",
+                    "secondary": "#585f6c",
+                    "surface-bright": "#fcf8fa",
+                    "tertiary-container": "#261906",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#55442d",
+                    "inverse-primary": "#c0c6db",
+                    "on-primary-fixed": "#141b2b",
+                    "inverse-surface": "#303031",
+                    "primary-fixed-dim": "#c0c6db",
+                    "surface-dim": "#dcd9db",
+                    "on-secondary": "#ffffff",
+                    "on-background": "#1b1b1d",
+                    "on-surface-variant": "#45464c",
+                    "secondary-fixed-dim": "#c0c7d6",
+                    "primary": "#000000",
+                    "background": "#fcf8fa",
+                    "outline-variant": "#c6c6cd",
+                    "on-secondary-fixed": "#151c27",
+                    "surface-variant": "#e5e2e3",
+                    "on-tertiary-fixed": "#261906",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-container": "#7d8497",
+                    "on-error": "#ffffff",
+                    "surface-tint": "#575e70",
+                    "surface-container-low": "#f6f3f4",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed": "#f9debf",
+                    "surface-container-high": "#eae7e9",
+                    "surface": "#fcf8fa",
+                    "on-tertiary-container": "#968065",
+                    "surface-container-highest": "#e5e2e3",
+                    "on-surface": "#1b1b1d",
+                    "tertiary": "#000000",
+                    "on-primary-fixed-variant": "#404758",
+                    "secondary-fixed": "#dce2f3",
+                    "error": "#ba1a1a",
+                    "on-error-container": "#93000a",
+                    "primary-fixed": "#dce2f7"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "xs": "4px",
+                    "gutter": "24px",
+                    "sm": "8px",
+                    "container-max": "1280px",
+                    "lg": "24px",
+                    "unit": "4px",
+                    "xl": "40px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Geist"],
+                    "headline-lg-mobile": ["Geist"],
+                    "headline-lg": ["Geist"],
+                    "body-lg": ["Geist"],
+                    "body-md": ["Geist"],
+                    "display-lg": ["Geist"],
+                    "title-md": ["Geist"],
+                    "label-md": ["Geist"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "title-md": ["18px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface selection:bg-secondary-container">
+<div class="flex min-h-screen">
+<!-- SideNavBar (The Anchor) -->
+<aside class="hidden md:flex flex-col h-screen left-0 w-64 bg-surface-container border-r border-outline-variant p-md gap-sm fixed">
+<div class="px-md py-lg mb-md">
+<span class="font-title-md text-title-md font-black text-primary">FotoCloud Admin</span>
+</div>
+<nav class="flex flex-col gap-xs flex-grow">
+<a class="flex items-center gap-md px-md py-sm text-on-secondary-fixed-variant hover:bg-surface-variant transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+<a class="flex items-center gap-md px-md py-sm text-on-secondary-fixed-variant hover:bg-surface-variant transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="photo_library">photo_library</span>
+                    Gallery
+                </a>
+<a class="flex items-center gap-md px-md py-sm bg-secondary-container text-on-secondary-container rounded-lg font-bold font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                    Settings
+                </a>
+</nav>
+<div class="mt-auto pt-md border-t border-outline-variant">
+<div class="flex items-center gap-md px-md py-sm mb-lg">
+<div class="w-10 h-10 rounded-full bg-surface-variant overflow-hidden border border-outline-variant">
+<img alt="User Profile" data-alt="A professional headshot of a high-end commercial photographer in a minimalist studio environment. The lighting is soft and flattering, with a bright white background reflecting a clean light-mode SaaS aesthetic. The individual has a friendly yet professional expression, dressed in a black designer shirt." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcU5tkcqJKDcC09ym_ohT-FzZAfKPr7UJ1Iq3w6M0b6Ap0Cs8b6sdRQXHES8J_rzuIaL3VYSDvvt9k1QheH2MBSZVVnk-Pe6YOe14mRKCSiury2nUzqqAxS8Fpf33QnNqANx4VLT9969rDk852IvqdGEMTuyusJcj38p2bvOVOkOIY4EhGzSJUz3DKsgO922ZKkM-0SoZbnQKeed_c_y84tsfu6mrEio0tZdHBwggSG5S5b4fKw0j8HhbdV7nt5leVzIHlx4DyzzV8"/>
+</div>
+<div class="flex flex-col overflow-hidden">
+<span class="font-label-md text-label-md font-bold truncate">FotoCloud Admin</span>
+<span class="font-label-md text-label-md text-outline truncate">admin@fotocloud.com</span>
+</div>
+</div>
+<button class="flex items-center gap-md w-full px-md py-sm text-on-secondary-fixed-variant hover:bg-surface-variant transition-all font-label-md text-label-md">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                    Logout
+                </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-grow md:ml-64 px-gutter py-xl max-w-5xl">
+<!-- Header Section -->
+<header class="mb-xl">
+<h1 class="font-headline-lg text-headline-lg text-primary mb-xs">Pengaturan Akun</h1>
+<p class="font-body-md text-body-md text-secondary">Kelola profil studio dan integrasi penyimpanan cloud Anda.</p>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-xl">
+<!-- Main Form Column -->
+<div class="lg:col-span-2 space-y-xl">
+<!-- Profile Section -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm">
+<div class="flex items-center gap-sm mb-lg">
+<span class="material-symbols-outlined text-primary" data-icon="person">person</span>
+<h2 class="font-title-md text-title-md font-bold">Profil Studio</h2>
+</div>
+<div class="space-y-md">
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-secondary px-xs">Nama Lengkap</label>
+<input class="w-full bg-white border border-outline-variant rounded-lg px-md py-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all font-body-md text-body-md" type="text" value="Aris Setiawan"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-secondary px-xs">Email Bisnis</label>
+<input class="w-full bg-white border border-outline-variant rounded-lg px-md py-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all font-body-md text-body-md" type="email" value="aris@fotocloud.com"/>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-secondary px-xs">Nama Studio</label>
+<input class="w-full bg-white border border-outline-variant rounded-lg px-md py-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all font-body-md text-body-md" type="text" value="Lumina Photography Studio"/>
+</div>
+</div>
+<div class="pt-md flex justify-end">
+<button class="bg-primary text-white font-body-md text-body-md px-lg py-sm rounded-lg hover:bg-gray-800 transition-colors">
+                                    Simpan Perubahan
+                                </button>
+</div>
+</div>
+</section>
+<!-- Google Drive Section (Connected State) -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-md mb-lg">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" data-icon="cloud_sync">cloud_sync</span>
+<h2 class="font-title-md text-title-md font-bold">Integrasi Penyimpanan</h2>
+</div>
+<div class="flex items-center gap-xs bg-green-50 px-sm py-xs rounded-full border border-green-100">
+<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+<span class="text-[10px] font-bold text-green-700 uppercase tracking-wider">Terhubung</span>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-md flex items-center gap-md border border-outline-variant/30">
+<div class="w-12 h-12 flex items-center justify-center bg-white rounded-lg border border-outline-variant shadow-sm">
+<svg fill="none" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12.5 3.5L3.5 19H12.5L21.5 3.5H12.5Z" fill="#0066DA"></path>
+<path d="M15.5 8.5L20 16.5H11L6.5 8.5H15.5Z" fill="#00AC47"></path>
+<path d="M9 13L4.5 21H13.5L18 13H9Z" fill="#FFBA00"></path>
+</svg>
+</div>
+<div class="flex-grow">
+<h3 class="font-body-md text-body-md font-bold">Google Drive</h3>
+<p class="font-label-md text-label-md text-secondary">studio.lumina@gmail.com</p>
+</div>
+<button class="bg-white border border-outline-variant text-primary font-label-md text-label-md px-md py-sm rounded-lg hover:bg-surface-variant transition-all">
+                                Ubah Akun
+                            </button>
+</div>
+<div class="mt-md px-xs">
+<p class="font-label-md text-label-md text-outline">Penyimpanan ini digunakan untuk backup otomatis semua sesi foto klien Anda secara real-time.</p>
+</div>
+</section>
+</div>
+<!-- Secondary Sidebar Column -->
+<div class="space-y-xl">
+<!-- Help/Guide Box -->
+<div class="bg-primary text-white rounded-xl p-lg shadow-lg relative overflow-hidden group">
+<!-- Atmospheric effect -->
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+<div class="relative z-10">
+<span class="material-symbols-outlined text-[32px] mb-md block" data-icon="lightbulb" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+<h3 class="font-title-md text-title-md font-bold mb-sm">Butuh Bantuan?</h3>
+<p class="font-body-md text-body-md opacity-90 mb-lg">Pelajari cara mengoptimalkan alur kerja studio Anda dengan panduan lengkap kami.</p>
+<a class="inline-flex items-center gap-xs font-label-md text-label-md font-bold group" href="#">
+                                Buka Pusat Bantuan 
+                                <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Usage Stats Card -->
+<div class="bg-surface-container border border-outline-variant rounded-xl p-lg">
+<h3 class="font-label-md text-label-md font-bold text-secondary mb-md uppercase tracking-widest">Kapasitas Cloud</h3>
+<div class="space-y-md">
+<div class="flex justify-between items-end mb-xs">
+<span class="font-headline-md text-headline-md font-black">1.2 TB</span>
+<span class="font-label-md text-label-md text-outline">dari 2 TB</span>
+</div>
+<div class="w-full bg-outline-variant h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[60%]"></div>
+</div>
+<p class="font-label-md text-label-md text-secondary">Anda telah menggunakan 60% dari total kuota penyimpanan Anda.</p>
+<button class="w-full py-sm border border-primary text-primary font-label-md text-label-md font-bold rounded-lg hover:bg-primary hover:text-white transition-all">
+                                Upgrade Plan
+                            </button>
+</div>
+</div>
+<!-- Illustration Placeholder -->
+<div class="rounded-xl overflow-hidden border border-outline-variant aspect-video grayscale hover:grayscale-0 transition-all duration-500 cursor-pointer">
+<img alt="Professional Photography Work" data-alt="A high-contrast cinematic photograph of a professional photographer's workspace. A modern camera lens sits on a minimalist dark wood desk next to a sleek laptop displaying a photo editing interface. The lighting is dramatic, highlighting the elegant textures of the equipment, following a professional SaaS brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWPmCEOQ-HL8fKbs26kA-bHf9zEcfQb5X-wdcjBVH_dRveu-naHgTY8htWZrjSg_PfNefMjaHrOi1zaCLr9hwjeJmEA92f6lKfOR1AV6P_alWuGqqpSiiDnM29wM6cPNUgqnJBhGs548RIY4qnqLmtXsLYoRW-QG0gerHrALUitdGPn-J8d-JWpuEPLwLP5RcdZpquLnbhd7m6DB409AI-LzlcfMRuigl_X5apuiPeut4aDnnnXDNab7YNUA3_ma9eVh0haDUXziLZ"/>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-xl pt-xl border-t border-outline-variant flex flex-col md:flex-row justify-between items-center gap-md">
+<span class="font-label-md text-label-md text-secondary">© 2024 FotoCloud SaaS. All rights reserved.</span>
+<div class="flex gap-lg">
+<a class="font-label-md text-label-md text-outline hover:text-primary underline" href="#">Privacy</a>
+<a class="font-label-md text-label-md text-outline hover:text-primary underline" href="#">Terms</a>
+<a class="font-label-md text-label-md text-outline hover:text-primary underline" href="#">Support</a>
+</div>
+</footer>
+</main>
+</div>
+<!-- Micro-interaction Script -->
+<script>
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.querySelector('label')?.classList.add('text-primary');
+            });
+            input.addEventListener('blur', function() {
+                this.parentElement.querySelector('label')?.classList.remove('text-primary');
+            });
+        });
+    </script>
+</body></html>

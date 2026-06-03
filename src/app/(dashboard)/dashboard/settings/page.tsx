@@ -13,116 +13,147 @@ export default async function SettingsPage({
 
   const user = await prisma.user.findUnique({
     where: { id: session!.user.id },
-    select: { name: true, email: true, businessName: true, googleEmail: true },
+    select: { name: true, email: true, businessName: true, googleEmail: true, plan: true, planExpiresAt: true },
   });
 
-  const messages: Record<string, string> = {
-    google_connected: "Google Drive berhasil terhubung!",
-  };
-  const errors: Record<string, string> = {
-    google_denied: "Akses Google Drive ditolak",
-    google_failed: "Gagal menghubungkan Google Drive",
-  };
+  const isPro = user?.plan === "pro" && (!user.planExpiresAt || user.planExpiresAt > new Date());
 
   return (
-    <div className="max-w-xl space-y-6">
-      <div className="flex items-center gap-3">
-        <Link href="/dashboard" className="text-gray-500 hover:text-gray-900 text-sm">
-          ← Dashboard
-        </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Pengaturan</h1>
-      </div>
+    <div>
+      <h1 className="text-2xl font-bold text-gray-900 mb-1">Pengaturan Akun</h1>
+      <p className="text-sm text-gray-500 mb-8">Kelola profil studio dan integrasi penyimpanan cloud Anda.</p>
 
-      {sp.success && messages[sp.success] && (
-        <div className="bg-green-50 text-green-700 text-sm px-4 py-3 rounded-lg">
-          {messages[sp.success]}
+      {sp.success === "google_connected" && (
+        <div className="mb-6 bg-green-50 border border-green-100 text-green-700 text-sm px-4 py-3 rounded-xl">
+          Google Drive berhasil terhubung!
         </div>
       )}
-      {sp.error && errors[sp.error] && (
-        <div className="bg-red-50 text-red-700 text-sm px-4 py-3 rounded-lg">
-          {errors[sp.error]}
+      {sp.error && (
+        <div className="mb-6 bg-red-50 border border-red-100 text-red-600 text-sm px-4 py-3 rounded-xl">
+          {sp.error === "google_denied" ? "Akses Google Drive ditolak" : "Gagal menghubungkan Google Drive"}
         </div>
       )}
 
-      {/* Profil */}
-      <div className="bg-white border rounded-xl p-5">
-        <h2 className="font-semibold text-gray-900 mb-4">Profil</h2>
-        <div className="space-y-2 text-sm">
-          <div className="flex justify-between">
-            <span className="text-gray-500">Nama</span>
-            <span className="font-medium">{user?.name}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-500">Email</span>
-            <span className="font-medium">{user?.email}</span>
-          </div>
-          {user?.businessName && (
-            <div className="flex justify-between">
-              <span className="text-gray-500">Studio / Bisnis</span>
-              <span className="font-medium">{user.businessName}</span>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left: main settings */}
+        <div className="lg:col-span-2 space-y-5">
+          {/* Profile */}
+          <div className="bg-white border border-gray-200 rounded-2xl p-6">
+            <h2 className="text-base font-semibold text-gray-900 mb-5 flex items-center gap-2">
+              <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              Profil Studio
+            </h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs text-gray-500 mb-1.5">Nama Lengkap</label>
+                <input
+                  defaultValue={user?.name ?? ""}
+                  className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-all"
+                  readOnly
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1.5">Email Bisnis</label>
+                  <input
+                    defaultValue={user?.email ?? ""}
+                    className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-all"
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1.5">Nama Studio</label>
+                  <input
+                    defaultValue={user?.businessName ?? ""}
+                    placeholder="Nama studio Anda"
+                    className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-all"
+                    readOnly
+                  />
+                </div>
+              </div>
+              <button className="bg-gray-900 text-white text-sm font-medium px-5 py-2.5 rounded-xl hover:bg-gray-700 transition-colors">
+                Simpan Perubahan
+              </button>
             </div>
-          )}
+          </div>
+
+          {/* Google Drive */}
+          <div className="bg-white border border-gray-200 rounded-2xl p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-base font-semibold text-gray-900 flex items-center gap-2">
+                <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Integrasi Penyimpanan
+              </h2>
+              {user?.googleEmail && (
+                <span className="text-xs font-semibold text-green-600 bg-green-50 border border-green-100 px-2.5 py-1 rounded-full">
+                  ● TERHUBUNG
+                </span>
+              )}
+            </div>
+
+            <div className="border border-gray-200 rounded-xl p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 bg-white border border-gray-200 rounded-lg flex items-center justify-center shadow-sm">
+                  <svg viewBox="0 0 24 24" className="w-5 h-5">
+                    <path d="M4.433 22l4.267-7.4H22l-4.267 7.4H4.433zm3.567-9L2 4h8.567l6 9H8zm5.567-9h8.566L16 13H7.433L13.567 4z" fill="#4285F4" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Google Drive</p>
+                  <p className="text-xs text-gray-500">{user?.googleEmail ?? "Belum terhubung"}</p>
+                </div>
+              </div>
+              <a href="/api/auth/google"
+                className="text-sm font-medium text-gray-600 border border-gray-300 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors">
+                {user?.googleEmail ? "Ubah Akun" : "Hubungkan"}
+              </a>
+            </div>
+
+            <p className="text-xs text-gray-400 mt-3">
+              Penyimpanan ini digunakan untuk backup otomatis semua sesi foto klien Anda secara real-time.
+            </p>
+          </div>
         </div>
-      </div>
 
-      {/* Google Drive */}
-      <div className="bg-white border rounded-xl p-5">
-        <h2 className="font-semibold text-gray-900 mb-1">Google Drive</h2>
-        <p className="text-sm text-gray-500 mb-4">
-          Hubungkan Google Drive Anda agar FotoCloud bisa membaca folder foto/video.
-        </p>
-
-        {user?.googleEmail ? (
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-900">Terhubung</p>
-              <p className="text-xs text-gray-500">{user.googleEmail}</p>
+        {/* Right sidebar */}
+        <div className="space-y-4">
+          {/* Help */}
+          <div className="bg-gray-900 text-white rounded-2xl p-5">
+            <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center mb-3">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
             </div>
-            <a
-              href="/api/auth/google"
-              className="text-sm text-gray-600 hover:text-gray-900 underline"
-            >
-              Ganti akun
-            </a>
+            <h3 className="font-semibold mb-1">Butuh Bantuan?</h3>
+            <p className="text-xs text-gray-400 mb-4 leading-relaxed">
+              Pelajari cara mengoptimalkan alur kerja studio Anda dengan panduan lengkap kami.
+            </p>
+            <Link href="#" className="text-sm font-medium text-white hover:text-gray-300 transition-colors flex items-center gap-1">
+              Buka Pusat Bantuan →
+            </Link>
           </div>
-        ) : (
-          <a
-            href="/api/auth/google"
-            className="inline-flex items-center gap-2 bg-white border border-gray-300 text-gray-700 px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
-          >
-            <svg viewBox="0 0 24 24" className="w-4 h-4" aria-hidden="true">
-              <path
-                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                fill="#4285F4"
-              />
-              <path
-                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                fill="#34A853"
-              />
-              <path
-                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                fill="#FBBC05"
-              />
-              <path
-                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                fill="#EA4335"
-              />
-            </svg>
-            Hubungkan Google Drive
-          </a>
-        )}
-      </div>
 
-      {/* Cara pakai */}
-      <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 text-sm text-blue-800">
-        <h3 className="font-medium mb-2">Cara menghubungkan folder Drive</h3>
-        <ol className="space-y-1 list-decimal list-inside text-blue-700">
-          <li>Hubungkan Google Drive di atas</li>
-          <li>Buka Google Drive, masuk ke folder foto/video klien</li>
-          <li>Klik kanan folder → Bagikan → Salin link</li>
-          <li>Paste link tersebut di halaman detail project</li>
-          <li>Klik "Sync Drive" untuk memuat media</li>
-        </ol>
+          {/* Plan */}
+          <div className="bg-white border border-gray-200 rounded-2xl p-5">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Paket Saat Ini</p>
+            <div className="flex items-baseline gap-1 mb-1">
+              <span className="text-2xl font-bold text-gray-900">{isPro ? "Pro" : "Gratis"}</span>
+            </div>
+            <p className="text-xs text-gray-500 mb-4">
+              {isPro ? "Akses penuh ke semua fitur" : "1 project · Fitur dasar"}
+            </p>
+            {!isPro && (
+              <Link href="/pricing"
+                className="block w-full text-center text-sm font-medium border border-gray-300 py-2 rounded-xl hover:bg-gray-50 transition-colors">
+                Upgrade Plan
+              </Link>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

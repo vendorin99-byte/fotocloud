@@ -7,11 +7,7 @@ import { SyncButton } from "@/components/projects/SyncButton";
 import { TokenManager } from "@/components/tokens/TokenManager";
 import { MediaGrid } from "@/components/media/MediaGrid";
 
-export default async function ProjectDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
   const { id } = await params;
 
@@ -22,9 +18,7 @@ export default async function ProjectDetailPage({
         where: { isHidden: false },
         orderBy: [{ sortOrder: "asc" }, { takenAt: "asc" }],
         include: {
-          reviews: {
-            select: { status: true, accessToken: { select: { label: true, token: true } } },
-          },
+          reviews: { select: { status: true, accessToken: { select: { label: true, token: true } } } },
           _count: { select: { comments: true } },
         },
       },
@@ -40,79 +34,171 @@ export default async function ProjectDetailPage({
 
   if (!project) notFound();
 
-  const syncStatusLabel: Record<string, string> = {
-    pending: "Belum disync",
-    syncing: "Syncing...",
-    synced: "Tersync",
-    error: "Error sync",
-  };
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "";
 
   return (
-    <div className="space-y-8">
+    <div>
+      {/* Breadcrumb */}
+      <nav className="text-sm text-gray-400 mb-4 flex items-center gap-2">
+        <Link href="/dashboard" className="hover:text-gray-600">Dashboard</Link>
+        <span>/</span>
+        <Link href="/dashboard" className="hover:text-gray-600">Wedding Session</Link>
+        <span>/</span>
+        <span className="text-gray-900 font-medium truncate">{project.name}</span>
+      </nav>
+
       {/* Header */}
-      <div className="flex items-start gap-4">
-        <Link href="/dashboard" className="mt-1 text-gray-500 hover:text-gray-900 text-sm">
-          ←
-        </Link>
-        <div className="flex-1 min-w-0">
-          <h1 className="text-2xl font-bold text-gray-900 truncate">{project.name}</h1>
-          {project.clientName && (
-            <p className="text-gray-500 mt-0.5">{project.clientName}</p>
-          )}
-        </div>
-        <Link
-          href={`/dashboard/projects/${id}/edit`}
-          className="text-sm text-gray-500 hover:text-gray-900 border border-gray-300 px-3 py-1.5 rounded-lg"
-        >
-          Edit
-        </Link>
-      </div>
-
-      {/* Drive + Sync */}
-      <div className="bg-white border rounded-xl p-5">
-        <div className="flex items-center justify-between gap-4">
-          <div className="min-w-0">
-            <p className="text-sm font-medium text-gray-700">Google Drive</p>
-            {project.driveFolderUrl ? (
-              <a
-                href={project.driveFolderUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-blue-600 hover:underline truncate block max-w-sm"
-              >
-                {project.driveFolderUrl}
-              </a>
-            ) : (
-              <p className="text-sm text-gray-400">
-                Belum ada folder Drive —{" "}
-                <Link href={`/dashboard/projects/${id}/edit`} className="underline">
-                  Hubungkan
-                </Link>
-              </p>
-            )}
-            <p className="text-xs text-gray-400 mt-1">
-              Status: {syncStatusLabel[project.syncStatus] ?? "-"}
-              {project.lastSyncedAt &&
-                ` · Terakhir: ${new Date(project.lastSyncedAt).toLocaleString("id-ID")}`}
-            </p>
+      <div className="flex items-start justify-between gap-4 mb-6">
+        <div>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-bold text-gray-900">{project.name}</h1>
+            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">PRO</span>
           </div>
-          {project.driveFolderUrl && (
-            <SyncButton projectId={id} syncStatus={project.syncStatus} />
+          {project.clientName && (
+            <p className="text-sm text-gray-500 mt-0.5">
+              Client: {project.clientName}
+              {project.lastSyncedAt && ` · Created ${new Date(project.lastSyncedAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}`}
+            </p>
+          )}
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <Link href={`/dashboard/projects/${id}/edit`}
+            className="flex items-center gap-1.5 text-sm text-gray-600 border border-gray-300 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors">
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+            Edit Project
+          </Link>
+          {project.accessTokens[0] && (
+            <a href={`${appUrl}/gallery/${project.accessTokens[0].token}`} target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-sm bg-gray-900 text-white px-3 py-1.5 rounded-lg hover:bg-gray-700 transition-colors">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              Share Gallery
+            </a>
           )}
         </div>
       </div>
 
-      {/* Media Grid */}
-      <div>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">
-          Media ({project.mediaItems.length})
-        </h2>
+      {/* Info Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        {/* Google Drive */}
+        <div className="bg-white border border-gray-200 rounded-2xl p-5">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M4.433 22l4.267-7.4H22l-4.267 7.4H4.433zm3.567-9L2 4h8.567l6 9H8zm5.567-9h8.566L16 13H7.433L13.567 4z" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-900">Google Drive Sync</p>
+                <p className="text-xs text-gray-400">
+                  {project.lastSyncedAt
+                    ? `Synced on ${new Date(project.lastSyncedAt).toLocaleDateString("en-US", { month: "long", day: "numeric" })}`
+                    : "Not synced yet"}
+                </p>
+              </div>
+            </div>
+            <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+              project.syncStatus === "synced" ? "bg-green-100 text-green-600" :
+              project.syncStatus === "syncing" ? "bg-blue-100 text-blue-600" :
+              project.syncStatus === "error" ? "bg-red-100 text-red-600" :
+              "bg-gray-100 text-gray-500"
+            }`}>
+              {project.syncStatus === "synced" ? "● Connected" : project.syncStatus === "syncing" ? "● Syncing" : project.syncStatus === "error" ? "● Error" : "● Pending"}
+            </span>
+          </div>
+          {project.driveFolderUrl ? (
+            <>
+              <div className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2 mb-3">
+                <p className="text-xs text-gray-600 truncate flex-1">Google Drive URL:</p>
+                <a href={project.driveFolderUrl} target="_blank" rel="noopener noreferrer"
+                  className="text-xs text-blue-600 truncate max-w-40 hover:underline">
+                  {project.driveFolderUrl.replace("https://drive.google.com/drive/folders/", "drive.google.com/.../")}
+                </a>
+                <svg className="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </div>
+              <SyncButton projectId={id} syncStatus={project.syncStatus} />
+            </>
+          ) : (
+            <Link href={`/dashboard/projects/${id}/edit`}
+              className="text-sm text-blue-600 hover:underline">
+              + Hubungkan folder Google Drive
+            </Link>
+          )}
+        </div>
+
+        {/* Client Access */}
+        <div className="bg-white border border-gray-200 rounded-2xl p-5">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center">
+                <svg className="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-900">Client Access Portal</p>
+                <p className="text-xs text-gray-400">Share link for client review</p>
+              </div>
+            </div>
+            <div className={`w-10 h-5 rounded-full transition-colors ${project.accessTokens.length > 0 ? "bg-green-500" : "bg-gray-300"} relative`}>
+              <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${project.accessTokens.length > 0 ? "translate-x-5" : "translate-x-0.5"}`} />
+            </div>
+          </div>
+          {project.accessTokens[0] ? (
+            <>
+              <div className="bg-gray-50 rounded-lg px-3 py-2 mb-3">
+                <p className="text-xs text-gray-500 mb-0.5">Public Access Link:</p>
+                <p className="text-xs text-gray-700 truncate">
+                  {appUrl}/gallery/{project.accessTokens[0].token.slice(0, 20)}...
+                </p>
+              </div>
+              <button
+                onClick={() => {}}
+                className="flex items-center gap-1.5 text-sm text-gray-700 border border-gray-300 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors w-full justify-center"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                Copy Link
+              </button>
+            </>
+          ) : (
+            <p className="text-sm text-gray-400">Belum ada link klien</p>
+          )}
+        </div>
+      </div>
+
+      {/* Media */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-semibold text-gray-900">
+            Media Assets ({project.mediaItems.length})
+          </h2>
+          <div className="flex items-center gap-2">
+            <button className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-lg hover:bg-gray-50">
+              <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z" />
+              </svg>
+            </button>
+            <button className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-lg hover:bg-gray-50">
+              <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+              </svg>
+            </button>
+          </div>
+        </div>
         <MediaGrid items={project.mediaItems} />
       </div>
 
-      {/* Client Links */}
-      <div>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Link Klien</h2>
+      {/* Tokens */}
+      <div className="bg-white border border-gray-200 rounded-2xl p-5">
+        <h2 className="text-base font-semibold text-gray-900 mb-4">Link Klien</h2>
         <TokenManager
           projectId={id}
           initialTokens={project.accessTokens.map((t: typeof project.accessTokens[number]) => ({

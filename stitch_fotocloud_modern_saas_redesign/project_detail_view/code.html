@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Project Detail - Wedding Session - The Smiths</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        @font-face {
+            font-family: 'Geist';
+            src: url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        }
+        body {
+            font-family: 'Geist', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .masonry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 24px;
+        }
+        .glass-effect {
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#f0edee",
+                        "secondary-container": "#dce2f3",
+                        "outline": "#76777d",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#404754",
+                        "primary-container": "#141b2b",
+                        "on-secondary-container": "#5e6572",
+                        "inverse-on-surface": "#f3f0f1",
+                        "tertiary-fixed-dim": "#dcc2a4",
+                        "secondary": "#585f6c",
+                        "surface-bright": "#fcf8fa",
+                        "tertiary-container": "#261906",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#55442d",
+                        "inverse-primary": "#c0c6db",
+                        "on-primary-fixed": "#141b2b",
+                        "inverse-surface": "#303031",
+                        "primary-fixed-dim": "#c0c6db",
+                        "surface-dim": "#dcd9db",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1b1b1d",
+                        "on-surface-variant": "#45464c",
+                        "secondary-fixed-dim": "#c0c7d6",
+                        "primary": "#000000",
+                        "background": "#fcf8fa",
+                        "outline-variant": "#c6c6cd",
+                        "on-secondary-fixed": "#151c27",
+                        "surface-variant": "#e5e2e3",
+                        "on-tertiary-fixed": "#261906",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#7d8497",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#575e70",
+                        "surface-container-low": "#f6f3f4",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed": "#f9debf",
+                        "surface-container-high": "#eae7e9",
+                        "surface": "#fcf8fa",
+                        "on-tertiary-container": "#968065",
+                        "surface-container-highest": "#e5e2e3",
+                        "on-surface": "#1b1b1d",
+                        "tertiary": "#000000",
+                        "on-primary-fixed-variant": "#404758",
+                        "secondary-fixed": "#dce2f3",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#dce2f7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "sm": "8px",
+                        "container-max": "1280px",
+                        "lg": "24px",
+                        "unit": "4px",
+                        "xl": "40px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Geist"],
+                        "headline-lg": ["Geist"],
+                        "body-lg": ["Geist"],
+                        "body-md": ["Geist"],
+                        "display-lg": ["Geist"],
+                        "title-md": ["Geist"],
+                        "label-md": ["Geist"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "title-md": ["18px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex overflow-hidden">
+<!-- Sidebar Navigation Shell -->
+<aside class="hidden md:flex flex-col h-screen left-0 w-64 bg-surface-container dark:bg-primary-container border-r border-outline-variant p-md gap-sm">
+<div class="mb-xl px-sm">
+<h1 class="font-title-md text-title-md font-black text-primary dark:text-on-primary-fixed">FotoCloud Admin</h1>
+</div>
+<nav class="flex flex-col gap-xs flex-1">
+<a class="flex items-center gap-md px-md py-sm text-on-secondary-fixed-variant hover:bg-surface-variant transition-all rounded-lg font-label-md text-label-md translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-md px-md py-sm bg-secondary-container text-on-secondary-container rounded-lg font-bold font-label-md text-label-md translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="photo_library" style="font-variation-settings: 'FILL' 1;">photo_library</span>
+                Gallery
+            </a>
+<a class="flex items-center gap-md px-md py-sm text-on-secondary-fixed-variant hover:bg-surface-variant transition-all rounded-lg font-label-md text-label-md translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="mt-auto border-t border-outline-variant pt-md px-sm">
+<div class="flex items-center gap-sm mb-md">
+<div class="w-10 h-10 rounded-full bg-outline-variant flex items-center justify-center overflow-hidden">
+<img alt="User" class="w-full h-full object-cover" data-alt="A close-up, high-end professional headshot of a creative photographer in a minimalist studio. The lighting is soft and directional, highlighting facial features with a clean, light-mode aesthetic. The background is a soft, neutral gray, keeping the focus entirely on the subject's friendly and professional expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtQQjl2o993isNg7Y3opGi7-cP1K5fkjVR_gjdXNlrzY27uRyAmcdmJWsqYe5j2RFZIgvBDHE1ckdL3A7fmMq4QbmBF3V9hUc8ZysdtsGnLm7ChyOgQa3reTCNDR6dimyVuiIvZaaD31qyQyLLeeHN4tqwWDlniynuTfipMYRV2gqkUBfCT8Yo5VC7ROrOwRyrqCGAGJ7MBCzva3GGk2dIni_ldknivUquoSWaSVsAuoeha-Wv389qfV12Ib1M9Iiuxel2Of8DyBuy"/>
+</div>
+<div>
+<p class="font-label-md text-label-md font-bold text-primary">Admin</p>
+<p class="text-[10px] text-outline">admin@fotocloud.com</p>
+</div>
+</div>
+<button class="w-full py-sm bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity">
+                Upload Photos
+            </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 h-screen overflow-y-auto relative">
+<!-- Header / Breadcrumbs -->
+<header class="sticky top-0 z-30 bg-background/80 glass-effect border-b border-outline-variant">
+<div class="px-gutter py-md max-w-container-max mx-auto flex flex-col md:flex-row md:items-center justify-between gap-md">
+<div>
+<nav class="flex items-center gap-xs text-outline font-label-md text-label-md mb-xs">
+<a class="hover:text-primary transition-colors" href="#">Dashboard</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-medium">Wedding Session - The Smiths</span>
+</nav>
+<div class="flex items-center gap-md">
+<h2 class="font-headline-lg text-headline-lg text-primary">Wedding Session - The Smiths</h2>
+<span class="px-sm py-1 bg-primary text-on-primary text-[10px] font-bold rounded-full uppercase tracking-widest">Pro</span>
+</div>
+<p class="font-body-md text-body-md text-secondary mt-1">Client: The Smiths • Created July 12, 2024</p>
+</div>
+<div class="flex items-center gap-sm">
+<button class="px-md py-2.5 bg-surface-container border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-surface-variant transition-all flex items-center gap-sm">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+                        Edit Project
+                    </button>
+<button class="px-md py-2.5 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-zinc-800 transition-all">
+                        Share Gallery
+                    </button>
+</div>
+</div>
+</header>
+<div class="p-gutter max-w-container-max mx-auto space-y-gutter pb-xl">
+<!-- Management Cards Row -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+<!-- Drive Card -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm">
+<div class="flex items-start justify-between mb-lg">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-secondary-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[28px]" data-icon="cloud_sync">cloud_sync</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md font-bold text-primary">Google Drive Sync</h3>
+<p class="text-label-md font-label-md text-on-secondary-container">Automated high-res backup active</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="flex items-center gap-xs text-[12px] font-bold text-emerald-600">
+<span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+                                Connected
+                            </span>
+</div>
+</div>
+<div class="bg-surface-container rounded-lg p-md mb-lg">
+<p class="text-label-md font-label-md text-outline mb-xs">Source Folder URL</p>
+<div class="flex items-center justify-between">
+<code class="text-body-md font-body-md text-primary truncate mr-4">drive.google.com/f/wedding-smiths-2024-raw...</code>
+<span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary">open_in_new</span>
+</div>
+</div>
+<button class="w-full py-3 bg-surface-container-highest border border-outline-variant rounded-lg font-label-md text-label-md font-bold text-primary flex items-center justify-center gap-md transition-all hover:bg-surface-variant" id="sync-btn" onclick="handleSync()">
+<span class="material-symbols-outlined" id="sync-icon">sync</span>
+<span id="sync-text">Sync Drive Now</span>
+</button>
+</section>
+<!-- Client Link Card -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm">
+<div class="flex items-start justify-between mb-lg">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-primary-container flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[28px]" data-icon="link">link</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md font-bold text-primary">Client Access Portal</h3>
+<p class="text-label-md font-label-md text-on-secondary-container">Direct link for client proofing</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="bg-surface-container rounded-lg p-md mb-lg border border-primary/5">
+<p class="text-label-md font-label-md text-outline mb-xs">Secure Access Link</p>
+<p class="text-body-md font-body-md text-primary font-medium">fotocloud.com/portal/the-smiths-wedding-session</p>
+</div>
+<button class="w-full py-3 bg-primary text-on-primary rounded-lg font-label-md text-label-md font-bold flex items-center justify-center gap-md transition-all hover:bg-zinc-800" id="copy-btn" onclick="handleCopy()">
+<span class="material-symbols-outlined" id="copy-icon">content_copy</span>
+<span id="copy-text">Copy Link</span>
+</button>
+</section>
+</div>
+<!-- Media Grid Section -->
+<section>
+<div class="flex items-center justify-between mb-lg">
+<h3 class="font-headline-md text-headline-md text-primary">Media Assets <span class="text-outline font-normal ml-2">(142)</span></h3>
+<div class="flex gap-sm">
+<button class="p-2 rounded-lg bg-surface-container border border-outline-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+<button class="p-2 rounded-lg bg-surface-container border border-outline-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">grid_view</span>
+</button>
+</div>
+</div>
+<div class="masonry-grid">
+<!-- Media Item 1 -->
+<div class="group relative bg-surface-container rounded-xl overflow-hidden border border-outline-variant hover:shadow-lg transition-all duration-300 aspect-[4/5]">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A breathtaking landscape photograph of a wedding ceremony at sunset on a cliffside. The light is warm and golden, casting long shadows across the elegant floral arrangements. The photography style is cinematic and high-contrast, with a clean professional finish that emphasizes the vast, romantic setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2ght573wlNqMzR6zqdIcANUKp_tWJnoNp5rzuC04U311ALl4YeJouwCyUoytj_U6Q2YIv8GT_XKeUl9h34CDxqqLn03cwDoKNTsw62rXtDQQy0pRv4vCKY1JOb3mmfrm6bfZtluae4ScAUXkCjafGYMfCWLgXU0dymxdCQoKJ57i44jKBns2wQq7ihJRtmIdluvF-tSfNXh_XuB-ehZ47clq1GJsTzgRGLHZOYJ3B2KHfriLd84oROP4cApBUGxlsTtH0qTIPKoJO"/>
+<div class="absolute top-sm left-sm flex flex-col gap-xs">
+<span class="px-2 py-0.5 bg-emerald-500/90 text-white text-[10px] font-bold rounded-full backdrop-blur-sm">Approved</span>
+</div>
+<div class="absolute bottom-0 inset-x-0 p-md bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+<div class="flex items-center justify-between text-white">
+<p class="text-[11px] font-medium">DSC_0492.jpg</p>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+<span class="text-[11px] font-bold">12</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Media Item 2 (Revision) -->
+<div class="group relative bg-surface-container rounded-xl overflow-hidden border border-outline-variant hover:shadow-lg transition-all duration-300 aspect-[4/5]">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A candid close-up of a bride and groom laughing together during a toast. The background is softly blurred with warm bokeh lights from a reception hall. The lighting is intimate and natural, captured in a modern documentary photography style with rich tonal range and deep blacks." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhT_n_jt3Ctp6NBnSnT53JsdBDT_oOT9Ov-CVT2T9o2eAR3vCAgtrLeAuj8_Na-mZ9ckH6iIyg3_Yn3l-svTBYQ6FeqlMhlieOAHTGyJ1yviL0r4wYthpSjY5SEsAmRin_rHhJX35C9wnUlFR_zMx2vqCPM8WIBqq6jWSc9EYLIrho9R3i7pOlHKj4m9gJHugjYUWYXt-KzCOW4IkbIv8QUenB8Voe1OO094kTnwgHpoiVPajmVoxoEHn_DqanFErj1BPs8FeQFZ1A"/>
+<div class="absolute top-sm left-sm flex flex-col gap-xs">
+<span class="px-2 py-0.5 bg-amber-500/90 text-white text-[10px] font-bold rounded-full backdrop-blur-sm">Revision</span>
+</div>
+<div class="absolute bottom-0 inset-x-0 p-md bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+<div class="flex items-center justify-between text-white">
+<p class="text-[11px] font-medium">DSC_0811.jpg</p>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+<span class="text-[11px] font-bold">4</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Media Item 3 (Video) -->
+<div class="group relative bg-surface-container rounded-xl overflow-hidden border border-outline-variant hover:shadow-lg transition-all duration-300 aspect-[4/5]">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A wide-angle shot of a grand ballroom dance floor filled with wedding guests in formal attire. The lighting is dramatic with cool-toned overhead spots and warm ambient table lights. The image has a vibrant energy and a high-end editorial feel, with crisp details and a balanced composition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyQyj4o8bEOMl7FTBrqazlRCoKay0cKvsAY6v69JJ54PcqIHdd209oStitBOczcRQUVpE8csD5mxLfphYJaQdESBlWbspzQpn_Xt8CDskaSuybcNuXmKFJUYYOs8JBLessiUBvjZhGZEFhUsgRHPbPbn_2NC4F8JWvRzgY1u0lTLzOkkcx6AKt-jPbX-Pw5fnzGZ61erU50xrDqlUMyg8deEAxJ9XNM8KsAVr9T9J1juQ672gnyvez14pibX3onmhgnNbcYasF0Kex"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+<div class="absolute top-sm left-sm">
+<span class="px-2 py-0.5 bg-primary/80 text-white text-[10px] font-bold rounded-full backdrop-blur-sm">Video</span>
+</div>
+<div class="absolute bottom-0 inset-x-0 p-md bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+<div class="flex items-center justify-between text-white">
+<p class="text-[11px] font-medium">Highlights.mp4</p>
+<span class="text-[11px]">02:45</span>
+</div>
+</div>
+</div>
+<!-- Media Item 4 -->
+<div class="group relative bg-surface-container rounded-xl overflow-hidden border border-outline-variant hover:shadow-lg transition-all duration-300 aspect-[4/5]">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="An artistic black and white photograph of a wedding cake on a minimalist marble table. The composition is clean and centered, utilizing strong geometric lines and soft shadow play. The style is ultra-modern and sophisticated, showcasing texture and fine details in a high-key artistic manner." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7Ca-fj1QUZQhbdFjNvuIdvFS4zAjevG9Dq8rJRk3h5ewbADrJ_rgypESyzi8dNkDUiEdOGeaUT8T19wVxSyCjIfGpb0MggCHYoabBAS4GYSCi6Yd9-1ZgtxLVg2ypmuaMLu60yeq6dcn2pnJeGgIuVSLv0LnCwyB1tC1MshToR2GverRYLMb6u0N-S8F9C9f57WBEe1dUK02-CDB_lFJoYujBTjyJYDUEZTeeT44OmX_3munEQ0aV9A08JFJovXVCHjq2hFvJIagk"/>
+<div class="absolute top-sm left-sm flex flex-col gap-xs">
+<span class="px-2 py-0.5 bg-emerald-500/90 text-white text-[10px] font-bold rounded-full backdrop-blur-sm">Approved</span>
+</div>
+<div class="absolute bottom-0 inset-x-0 p-md bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+<div class="flex items-center justify-between text-white">
+<p class="text-[11px] font-medium">DSC_1204.jpg</p>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+<span class="text-[11px] font-bold">0</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Media Item 5 -->
+<div class="group relative bg-surface-container rounded-xl overflow-hidden border border-outline-variant hover:shadow-lg transition-all duration-300 aspect-[4/5]">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A portrait of the bridal party standing in a lush green garden during a soft overcast day. The colors are muted and earthy, with a gentle diffused light that creates a timeless, romantic aesthetic. The photography follows a fine-art film style, with smooth grain and a professional polished look." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1xrVZj3EcBMujbybNT4eVgoatKmjqIjes8JfgPimVjv-VBWxstomfdOy4NqeZ86sqqLROhtCmjDJmUYJA1KL4Wi7JhSiZrwyb0sUxomtl3iCLymQO3EHvKZTCgJ7uWZ0yGz9aqSFx5gsbE1wOdo3W_q3_xB7ANw-0mnhuYWmYaiW1tkIhztKuYZydNQT12-uV0VJe-PALHmCbmTOlYt5aamqOldNtJFvh9lzWG6UEBV4NXUVIf9XLA_V-tbpxVsAVQ4g4pOhf9NjF"/>
+<div class="absolute top-sm left-sm flex flex-col gap-xs">
+<span class="px-2 py-0.5 bg-emerald-500/90 text-white text-[10px] font-bold rounded-full backdrop-blur-sm">Approved</span>
+</div>
+<div class="absolute bottom-0 inset-x-0 p-md bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+<div class="flex items-center justify-between text-white">
+<p class="text-[11px] font-medium">DSC_1560.jpg</p>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+<span class="text-[11px] font-bold">2</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer -->
+<footer class="border-t border-outline-variant bg-surface-container-lowest py-xl px-gutter">
+<div class="max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-md">
+<p class="font-label-md text-label-md text-secondary">© 2024 FotoCloud SaaS. All rights reserved.</p>
+<div class="flex gap-lg">
+<a class="font-label-md text-label-md text-outline hover:text-primary underline" href="#">Privacy</a>
+<a class="font-label-md text-label-md text-outline hover:text-primary underline" href="#">Terms</a>
+<a class="font-label-md text-label-md text-outline hover:text-primary underline" href="#">Support</a>
+</div>
+</div>
+</footer>
+</main>
+<script>
+        function handleSync() {
+            const btn = document.getElementById('sync-btn');
+            const icon = document.getElementById('sync-icon');
+            const text = document.getElementById('sync-text');
+            
+            btn.disabled = true;
+            icon.classList.add('animate-spin');
+            text.innerText = 'Syncing Assets...';
+            
+            setTimeout(() => {
+                icon.classList.remove('animate-spin');
+                icon.innerText = 'check_circle';
+                text.innerText = 'Sync Complete';
+                btn.classList.add('bg-emerald-50', 'border-emerald-200', 'text-emerald-700');
+                
+                setTimeout(() => {
+                    icon.innerText = 'sync';
+                    text.innerText = 'Sync Drive Now';
+                    btn.disabled = false;
+                    btn.classList.remove('bg-emerald-50', 'border-emerald-200', 'text-emerald-700');
+                }, 3000);
+            }, 2500);
+        }
+
+        function handleCopy() {
+            const btn = document.getElementById('copy-btn');
+            const icon = document.getElementById('copy-icon');
+            const text = document.getElementById('copy-text');
+            
+            const originalText = text.innerText;
+            const originalIcon = icon.innerText;
+            
+            icon.innerText = 'done';
+            text.innerText = 'Copied!';
+            btn.classList.replace('bg-primary', 'bg-emerald-600');
+            
+            setTimeout(() => {
+                icon.innerText = originalIcon;
+                text.innerText = originalText;
+                btn.classList.replace('bg-emerald-600', 'bg-primary');
+            }, 2000);
+        }
+    </script>
+</body></html>

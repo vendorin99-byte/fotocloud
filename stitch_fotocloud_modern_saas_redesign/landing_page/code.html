@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FotoCloud - Bagikan Hasil Karya Anda dengan Elegan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        @font-face {
+            font-family: 'Geist';
+            src: url('https://cdn.jsdelivr.net/npm/geist-font@1.1.0/fonts/geist-sans/Geist-Medium.woff2') format('woff2');
+        }
+        body {
+            font-family: 'Geist', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .photo-thumbnail-border {
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#f0edee",
+                        "secondary-container": "#dce2f3",
+                        "outline": "#76777d",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#404754",
+                        "primary-container": "#141b2b",
+                        "on-secondary-container": "#5e6572",
+                        "inverse-on-surface": "#f3f0f1",
+                        "tertiary-fixed-dim": "#dcc2a4",
+                        "secondary": "#585f6c",
+                        "surface-bright": "#fcf8fa",
+                        "tertiary-container": "#261906",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#55442d",
+                        "inverse-primary": "#c0c6db",
+                        "on-primary-fixed": "#141b2b",
+                        "inverse-surface": "#303031",
+                        "primary-fixed-dim": "#c0c6db",
+                        "surface-dim": "#dcd9db",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1b1b1d",
+                        "on-surface-variant": "#45464c",
+                        "secondary-fixed-dim": "#c0c7d6",
+                        "primary": "#000000",
+                        "background": "#fcf8fa",
+                        "outline-variant": "#c6c6cd",
+                        "on-secondary-fixed": "#151c27",
+                        "surface-variant": "#e5e2e3",
+                        "on-tertiary-fixed": "#261906",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#7d8497",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#575e70",
+                        "surface-container-low": "#f6f3f4",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed": "#f9debf",
+                        "surface-container-high": "#eae7e9",
+                        "surface": "#fcf8fa",
+                        "on-tertiary-container": "#968065",
+                        "surface-container-highest": "#e5e2e3",
+                        "on-surface": "#1b1b1d",
+                        "tertiary": "#000000",
+                        "on-primary-fixed-variant": "#404758",
+                        "secondary-fixed": "#dce2f3",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#dce2f7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "sm": "8px",
+                        "container-max": "1280px",
+                        "lg": "24px",
+                        "unit": "4px",
+                        "xl": "40px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Geist"],
+                        "headline-lg-mobile": ["Geist"],
+                        "headline-lg": ["Geist"],
+                        "body-lg": ["Geist"],
+                        "body-md": ["Geist"],
+                        "display-lg": ["Geist"],
+                        "title-md": ["Geist"],
+                        "label-md": ["Geist"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "title-md": ["18px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopNavBar -->
+<header class="bg-surface docked full-width top-0 border-b border-outline-variant z-50">
+<nav class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-16">
+<div class="flex items-center gap-2">
+<img alt="FotoCloud Logo" class="h-8 w-8" src="data:image/png;base64,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"/>
+<span class="font-headline-md text-headline-md font-bold text-primary">FotoCloud</span>
+</div>
+<div class="hidden md:flex gap-xl items-center">
+<a class="font-body-md text-body-md text-primary font-bold border-b-2 border-primary" href="#">Fitur</a>
+<a class="font-body-md text-body-md text-secondary hover:text-primary transition-colors" href="#">Harga</a>
+<a class="font-body-md text-body-md text-secondary hover:text-primary transition-colors" href="#">Testimonial</a>
+</div>
+<div class="flex items-center gap-md">
+<button class="font-body-md text-body-md text-secondary px-md py-xs hover:text-primary transition-colors">Login</button>
+<button class="font-body-md text-body-md bg-primary text-on-primary px-lg py-sm rounded-lg hover:bg-on-primary-fixed-variant transition-all scale-95 duration-150 active:scale-90">Mulai Gratis</button>
+</div>
+</nav>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="pt-xl pb-24 px-gutter max-w-container-max mx-auto text-center overflow-hidden">
+<div class="mt-20 max-w-4xl mx-auto space-y-md">
+<h1 class="font-display-lg text-display-lg md:text-[64px] md:leading-[72px] text-primary">
+                    Bagikan Hasil Karya Anda dengan Elegan
+                </h1>
+<p class="font-body-lg text-body-lg text-secondary max-w-2xl mx-auto">
+                    Platform galeri foto profesional untuk fotografer modern. Tingkatkan pengalaman klien dengan presentasi visual yang memukau dan aman.
+                </p>
+<div class="pt-md flex flex-col sm:flex-row justify-center gap-md">
+<button class="bg-primary text-on-primary px-xl py-md rounded-lg font-title-md text-title-md hover:bg-on-primary-fixed-variant transition-all">Mulai Gratis</button>
+<button class="bg-surface-container-lowest border border-outline-variant text-primary px-xl py-md rounded-lg font-title-md text-title-md hover:bg-surface-variant transition-all">Lihat Demo</button>
+</div>
+</div>
+<!-- Hero Image Bento/Composition -->
+<div class="mt-xl relative">
+<div class="grid grid-cols-12 gap-md items-end">
+<div class="col-span-3 h-64 rounded-xl overflow-hidden shadow-sm photo-thumbnail-border transform -rotate-3 hover:rotate-0 transition-transform duration-500">
+<img class="w-full h-full object-cover" data-alt="A high-end professional photography session in a sunlit studio, showcasing a minimalist setup with high-end cameras and softbox lighting. The overall mood is sophisticated and clean, emphasizing a white and charcoal gray color palette. This image serves as a professional backdrop for a creative tech platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwxUDav0y1M3IoJoKjCjwywNy7AbB9dpVr4d_iH7fb0h4C_gx1XRa3B_qN61z-SaY7wqIx4tOFm0y87FzIZSVUA5lIvGKSx_QKBYbL7-j3xjYMTPYaF471_Q63V5y5x6_ve4MMnetastKPLeItMTSLWiFBv2dIkcyAtwfvchAfRo2-R-SOH2rnAAcWvUZor0hX0IhNlfeAeJpYOU-qIrpyEpaPh3svoMq6kvhPgrgpiSd6-ngVUwmY-MIP9cWzGqjmpryDx3ugRExu"/>
+</div>
+<div class="col-span-6 h-[480px] rounded-xl overflow-hidden shadow-sm photo-thumbnail-border relative">
+<img class="w-full h-full object-cover" data-alt="A stunning architectural photograph of a modern glass building during the blue hour. The lighting is crisp and cool, highlighting the geometric precision and luxury of the structure. The composition is balanced and artistic, reflecting the professional quality of a top-tier photographer's portfolio." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDew-vb_tUnfoPpRPoajv3f0ujWEnDM1hrez5YGG4LVIle2i8rZASVG8sUlJhKhmuYXiLvk0_GM_IsxRZoyKGQky1x4Q5PPlhs9DXyjTm1s_X08ITWhf02v-3PiQFUYJlfNoucq6s5imlh2upVBplhxwDlZaGuKABh_Lbc5X025W7YFse9Zbl2KOIsICBHxcMUDS9Sq8mtWpMHJAo6lrtOHurRX6frZccWlA2wbvNQeMQoEDTC7LduStG8Z-k5xEAatpMsYk-gQdetg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+</div>
+<div class="col-span-3 h-80 rounded-xl overflow-hidden shadow-sm photo-thumbnail-border transform rotate-2 hover:rotate-0 transition-transform duration-500">
+<img class="w-full h-full object-cover" data-alt="A detailed close-up shot of a high-end camera lens capturing light flares in a dark, moody environment. The aesthetic is monochromatic with deep blacks and sharp metallic highlights, suggesting premium quality and technical excellence. The image captures the essence of professional gear." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoTenNPtbBlSVg_Ztg5Vwlg_jDllScsTeYI1LZlOuQVEJkwuhg8LkdeM9PAqH6YCKrXvdZEfOnRzT07cHOXXxvK_bVHV9DqayQTCfDLiqwyFk1CKEfYTXotI05UXU-Ky5crY9xU_o_uaTT3dKomzpDP5FRk1OTomyZnPzVBQxGRc-k11xX9su5RJ2ScKXK2IhAEN1-jjgPdWXSM945QT_wwGbSzUOt5M2HDKoaoU8Z3dz9QAtD0o2RTfRVbDhaIkjv0L1xqIPxI4MM"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Section -->
+<section class="py-xl bg-surface-container-low border-y border-outline-variant">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="text-center mb-xl">
+<h2 class="font-headline-lg text-headline-lg text-primary">Keunggulan FotoCloud</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<!-- Feature Card 1 -->
+<div class="bg-surface-container-lowest p-xl rounded-xl border border-outline-variant shadow-sm hover:shadow-md transition-shadow">
+<div class="w-12 h-12 bg-secondary-container text-primary rounded-lg flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-3xl">cloud</span>
+</div>
+<h3 class="font-title-md text-title-md text-primary mb-sm">Penyimpanan Cloud</h3>
+<p class="font-body-md text-body-md text-secondary">
+                            Simpan ribuan foto resolusi tinggi tanpa khawatir kehabisan ruang. Akses karya Anda dari mana saja, kapan saja.
+                        </p>
+</div>
+<!-- Feature Card 2 -->
+<div class="bg-surface-container-lowest p-xl rounded-xl border border-outline-variant shadow-sm hover:shadow-md transition-shadow">
+<div class="w-12 h-12 bg-secondary-container text-primary rounded-lg flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-3xl">groups</span>
+</div>
+<h3 class="font-title-md text-title-md text-primary mb-sm">Review Klien Mudah</h3>
+<p class="font-body-md text-body-md text-secondary">
+                            Klien dapat memilih foto favorit dan memberikan feedback langsung di galeri digital yang elegan dan intuitif.
+                        </p>
+</div>
+<!-- Feature Card 3 -->
+<div class="bg-surface-container-lowest p-xl rounded-xl border border-outline-variant shadow-sm hover:shadow-md transition-shadow">
+<div class="w-12 h-12 bg-secondary-container text-primary rounded-lg flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-3xl">verified_user</span>
+</div>
+<h3 class="font-title-md text-title-md text-primary mb-sm">Keamanan Terjamin</h3>
+<p class="font-body-md text-body-md text-secondary">
+                            Lindungi karya Anda dengan watermark otomatis dan sistem proteksi password untuk setiap galeri klien.
+                        </p>
+</div>
+</div>
+</div>
+</section>
+<!-- How It Works Section -->
+<section class="py-24 px-gutter max-w-container-max mx-auto">
+<div class="flex flex-col md:flex-row items-center gap-xl">
+<div class="w-full md:w-1/2 space-y-xl">
+<h2 class="font-headline-lg text-headline-lg text-primary">Bagaimana Cara Kerjanya?</h2>
+<div class="space-y-lg">
+<div class="flex gap-md group">
+<div class="flex-shrink-0 w-10 h-10 rounded-full border-2 border-primary flex items-center justify-center font-bold text-primary group-hover:bg-primary group-hover:text-white transition-all">1</div>
+<div>
+<h4 class="font-title-md text-title-md text-primary">Hubungkan Drive</h4>
+<p class="font-body-md text-body-md text-secondary">Sinkronisasi langsung dengan layanan cloud favorit Anda untuk impor foto instan.</p>
+</div>
+</div>
+<div class="flex gap-md group">
+<div class="flex-shrink-0 w-10 h-10 rounded-full border-2 border-primary flex items-center justify-center font-bold text-primary group-hover:bg-primary group-hover:text-white transition-all">2</div>
+<div>
+<h4 class="font-title-md text-title-md text-primary">Buat Project</h4>
+<p class="font-body-md text-body-md text-secondary">Kelola set foto ke dalam album yang terorganisir dengan desain layout yang elegan.</p>
+</div>
+</div>
+<div class="flex gap-md group">
+<div class="flex-shrink-0 w-10 h-10 rounded-full border-2 border-primary flex items-center justify-center font-bold text-primary group-hover:bg-primary group-hover:text-white transition-all">3</div>
+<div>
+<h4 class="font-title-md text-title-md text-primary">Bagikan Link</h4>
+<p class="font-body-md text-body-md text-secondary">Kirim link galeri ke klien Anda. Mereka dapat melihat, mengunduh, dan mereview hasil foto.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="w-full md:w-1/2 grid grid-cols-2 gap-md p-md bg-surface-variant rounded-xl">
+<div class="space-y-md">
+<img class="rounded-lg shadow-sm photo-thumbnail-border w-full h-40 object-cover" data-alt="A clean UI interface showing a dashboard with file upload progress bars and minimalist icons. The lighting is soft and professional, highlighting a light-mode SaaS aesthetic with neutral grays and sharp typography. This visualization represents the easy process of connecting digital assets." src="https://lh3.googleusercontent.com/aida-public/AB6AXuARu_-0H36RUkIhPLmBLcto7xTzdhux-Sn8hFcWukmPdXMWCyEiAdIG8rSXYJd_sPEZvfhBW9kGjYH-TFC8Gw6LhXMO_UOvS-ozmYP2hINL52LIzgjmbsdXEI-u-iEQ6kqYjs57eJnBsPLppMuGisUS2TF8L8PeQYvAYE4CtaE_zvFYmcaMpRoBhOi4XkX8LqEnFK8NiRO6Pn3WFV8tgft5SUpFOHDpkO5F0ELOudGzFXmh1xIDKoIAORwzsuPRv8gmWlkcj_O1I4Ql"/>
+<img class="rounded-lg shadow-sm photo-thumbnail-border w-full h-64 object-cover" data-alt="An elegant digital photo gallery layout showing a grid of high-fashion portrait photographs. The UI is clean, with plenty of whitespace and refined borders. This represents the 'Create Project' step where photographers organize their work into beautiful albums." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBj62yFJqW0DzaDVXBmWusTxrW520s3MeQkfro5aWOmoM-3FdkATy6spu_1UGOAXTekDgaUIneVzZvDdVUfj0g7BZ7Q6akqU0XM7CClsYdPhOyBy7HLX8XVbvLatcSCNpc6prKjr6YmBVf1qjDtE4czcrOLd_xptnZ6QQBI3SR-oU6j5jMUmHierUxpV73S1jahECTzQMoRN1XxYp6YWWajzY_mXxgjJ2vkeXJ1Ex3NrnpFubilYTVdgt5NfIPUdO-MtrHRvqr1PNSW"/>
+</div>
+<div class="pt-xl space-y-md">
+<img class="rounded-lg shadow-sm photo-thumbnail-border w-full h-64 object-cover" data-alt="A professional photographer handing a stylish business card to a client in a modern workspace. The scene is bright and airy, with a focus on human interaction and professional service. The color palette is warm and inviting, emphasizing the connection between the creator and the client." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXZIKodLySTKTa84LTx2hpz_FafiYu2457xX3usPObkUYVbYusSZP9WRsXDo0o_XYHcRDd8EOAsnEHE0XWb-YwF437wicfkwadKqeqNsbJSZX0exXoagBxLP6wgZcxcVCKSESNq92vtvs15eHHmi24PwgMzWCgYFyRkuVuBq_rVMIxx6ycfMzki88pXbeBN_I1wvRK1JBEIDeDtn7XU_v69nsH57LL24VeuDfxVzNRCnbU0-yUw7C5G9KTqwBCaCOIJJPbu1biDFVR"/>
+<img class="rounded-lg shadow-sm photo-thumbnail-border w-full h-40 object-cover" data-alt="A mobile phone screen displaying a beautiful photography portfolio app. The interface is sleek and modern, with smooth animations and high-resolution imagery. This represents the final step of sharing a high-quality link with a client." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLW6I2bd-wvloRQsqL5EF0dyG5FmWQzKVKJq0g_v5hZYv189aVKehegQH9xCwqTlzWZg-XhE1bqtr1ecGqd8gDgZdoTp_TKYEJGI3saZP1zCMACUKQjEXs-6MkpV1KYA--3DGH-upEEnMtmroxAGVMClsIZWg-IjGyHoiVxHgF5IYOIbZwIpBeSVlnTLPb2S8UX3EG9SIBaM_3ikuw4Xuv-_8wF02Ym3hajR1q6p8fDvHsv9MmbMEVmVEXe3K5kYt_ybs_RjLXJXVq"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Pricing Preview -->
+<section class="py-24 bg-primary-container text-on-primary">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="text-center mb-xl">
+<h2 class="font-headline-lg text-headline-lg text-white mb-sm">Pilih Paket Anda</h2>
+<p class="font-body-lg text-body-lg text-on-primary-container">Investasi terbaik untuk bisnis fotografi profesional Anda.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-xl max-w-4xl mx-auto">
+<!-- Free Tier -->
+<div class="bg-surface-container-lowest p-xl rounded-xl border border-outline-variant flex flex-col items-center text-on-surface">
+<span class="font-label-md text-label-md uppercase tracking-widest text-secondary mb-md">Starter</span>
+<h3 class="font-display-lg text-display-lg text-primary mb-md">Gratis</h3>
+<ul class="space-y-sm mb-xl w-full">
+<li class="flex items-center gap-sm font-body-md text-body-md"><span class="material-symbols-outlined text-primary">check_circle</span> 5 Galeri Aktif</li>
+<li class="flex items-center gap-sm font-body-md text-body-md"><span class="material-symbols-outlined text-primary">check_circle</span> Penyimpanan 2GB</li>
+<li class="flex items-center gap-sm font-body-md text-body-md"><span class="material-symbols-outlined text-primary">check_circle</span> Watermark FotoCloud</li>
+<li class="flex items-center gap-sm font-body-md text-body-md text-outline"><span class="material-symbols-outlined">cancel</span> Domain Kustom</li>
+</ul>
+<button class="w-full py-md border border-primary text-primary font-bold rounded-lg hover:bg-surface-variant transition-all mt-auto">Pilih Gratis</button>
+</div>
+<!-- Pro Tier -->
+<div class="bg-white p-xl rounded-xl border-4 border-primary flex flex-col items-center text-on-surface relative transform scale-105 shadow-2xl">
+<div class="absolute -top-4 bg-primary text-on-primary px-lg py-xs rounded-full font-label-md text-label-md uppercase">Paling Populer</div>
+<span class="font-label-md text-label-md uppercase tracking-widest text-secondary mb-md">Pro Photographer</span>
+<div class="flex items-baseline gap-xs mb-md">
+<span class="font-display-lg text-display-lg text-primary">Rp 149k</span>
+<span class="font-body-md text-body-md text-secondary">/bulan</span>
+</div>
+<ul class="space-y-sm mb-xl w-full">
+<li class="flex items-center gap-sm font-body-md text-body-md"><span class="material-symbols-outlined text-primary">check_circle</span> Galeri Tanpa Batas</li>
+<li class="flex items-center gap-sm font-body-md text-body-md"><span class="material-symbols-outlined text-primary">check_circle</span> Penyimpanan 500GB</li>
+<li class="flex items-center gap-sm font-body-md text-body-md"><span class="material-symbols-outlined text-primary">check_circle</span> Tanpa Watermark</li>
+<li class="flex items-center gap-sm font-body-md text-body-md"><span class="material-symbols-outlined text-primary">check_circle</span> Domain Kustom &amp; Branding</li>
+</ul>
+<button class="w-full py-md bg-primary text-on-primary font-bold rounded-lg hover:bg-on-primary-fixed-variant transition-all mt-auto">Langganan Pro</button>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-24 px-gutter text-center bg-background">
+<div class="max-w-2xl mx-auto space-y-md">
+<h2 class="font-headline-lg text-headline-lg text-primary">Siap Memulai Perjalanan Visual Anda?</h2>
+<p class="font-body-lg text-body-lg text-secondary">Bergabunglah dengan ribuan fotografer yang telah mempercayakan karyanya pada FotoCloud.</p>
+<div class="pt-md">
+<button class="bg-primary text-on-primary px-xl py-md rounded-lg font-title-md text-title-md hover:bg-on-primary-fixed-variant transition-all scale-105 active:scale-100">Daftar Sekarang</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest full-width border-t border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-gutter py-xl max-w-container-max mx-auto">
+<div class="flex items-center gap-2 mb-md md:mb-0">
+<img alt="FotoCloud Logo" class="h-6 w-6" src="data:image/png;base64,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"/>
+<span class="font-title-md text-title-md font-bold text-primary">FotoCloud</span>
+</div>
+<div class="flex flex-wrap justify-center gap-lg items-center">
+<a class="font-label-md text-label-md text-outline hover:text-primary underline" href="#">Privacy</a>
+<a class="font-label-md text-label-md text-outline hover:text-primary underline" href="#">Terms</a>
+<a class="font-label-md text-label-md text-outline hover:text-primary underline" href="#">Support</a>
+</div>
+<p class="mt-md md:mt-0 font-label-md text-label-md text-secondary">
+                © 2024 FotoCloud SaaS. All rights reserved.
+            </p>
+</div>
+</footer>
+<script>
+        // Micro-interaction for buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.style.transform = 'scale(0.95)';
+            });
+            button.addEventListener('mouseup', () => {
+                button.style.transform = '';
+            });
+        });
+        
+        // Simple reveal on scroll observer
+        const observerOptions = {
+            threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-10');
+            observer.observe(section);
+        });
+    </script>
+</body></html>
