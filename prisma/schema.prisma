@@ -1,0 +1,208 @@
+generator client {
+  provider        = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── NextAuth Required Tables ───────────────────────────────────────────────
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─── Fotografer / User ───────────────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?   // hashed, null if using OAuth sign-in
+
+  businessName  String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Google Drive credentials (per-photographer OAuth)
+  googleAccessToken  String?  @db.Text
+  googleRefreshToken String?  @db.Text
+  googleTokenExpiry  DateTime?
+  googleEmail        String?
+
+  // Subscription
+  plan           String   @default("free")  // free | pro
+  planExpiresAt  DateTime?
+
+  accounts      Account[]
+  sessions      Session[]
+  projects      Project[]
+  subscriptions Subscription[]
+}
+
+// ─── Subscription ─────────────────────────────────────────────────────────────
+
+model Subscription {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Midtrans
+  orderId         String   @unique
+  snapToken       String?
+  status          String   @default("pending")  // pending | paid | failed | expired
+  amount          Int      // IDR, e.g. 99000
+  planDurationDays Int     @default(30)          // how many days of pro access
+
+  paidAt          DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// ─── Project ─────────────────────────────────────────────────────────────────
+
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  clientName  String?
+
+  // Google Drive folder linked to this project
+  driveFolderId  String?
+  driveFolderUrl String?
+  syncStatus     String   @default("pending") // pending | syncing | synced | error
+  lastSyncedAt   DateTime?
+
+  photographerId String
+  photographer   User   @relation(fields: [photographerId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accessTokens AccessToken[]
+  mediaItems   MediaItem[]
+}
+
+// ─── Access Token (unique URL per client/stakeholder) ────────────────────────
+
+model AccessToken {
+  id    String @id @default(cuid())
+  token String @unique @default(cuid())
+  label String? // "Link Bride", "Link Wedding Planner"
+
+  isActive    Boolean  @default(true)
+  canDownload Boolean  @default(true)
+  canComment  Boolean  @default(true)
+  expiresAt   DateTime?
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  reviews  MediaReview[]
+  comments Comment[]
+}
+
+// ─── Media Item (cache dari Google Drive) ────────────────────────────────────
+
+model MediaItem {
+  id          String @id @default(cuid())
+  driveFileId String
+  name        String
+  mimeType    String
+  type        String // "photo" | "video" | "other"
+
+  thumbnailUrl String?  @db.Text
+  webViewUrl   String?  @db.Text
+  downloadUrl  String?  @db.Text
+  fileSize     BigInt?
+  width        Int?
+  height       Int?
+  durationSecs Int?
+  takenAt      DateTime?
+
+  sortOrder Int     @default(0)
+  isHidden  Boolean @default(false)
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  reviews  MediaReview[]
+  comments Comment[]
+
+  @@unique([projectId, driveFileId])
+}
+
+// ─── Media Review (status per media × access token) ──────────────────────────
+
+model MediaReview {
+  id            String   @id @default(cuid())
+  status        String   @default("pending") // pending | approved | revision_requested
+  revisionNote  String?  @db.Text
+  reviewedAt    DateTime?
+
+  mediaItemId   String
+  mediaItem     MediaItem   @relation(fields: [mediaItemId], references: [id], onDelete: Cascade)
+
+  accessTokenId String
+  accessToken   AccessToken @relation(fields: [accessTokenId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([mediaItemId, accessTokenId])
+}
+
+// ─── Comment ─────────────────────────────────────────────────────────────────
+
+model Comment {
+  id           String  @id @default(cuid())
+  authorName   String
+  body         String  @db.Text
+  timestampSecs Int?   // for video comments: position in video
+
+  mediaItemId   String
+  mediaItem     MediaItem   @relation(fields: [mediaItemId], references: [id], onDelete: Cascade)
+
+  accessTokenId String
+  accessToken   AccessToken @relation(fields: [accessTokenId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
