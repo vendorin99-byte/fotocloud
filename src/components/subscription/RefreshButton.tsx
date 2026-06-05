@@ -7,16 +7,54 @@ export function RefreshButton() {
   const [loading, setLoading] = useState(false);
 
   async function handleRefresh() {
-    // Get latest subscription from history
-    const subscriptions = await fetch("/api/projects")
-      .then(() => fetch("/api/subscription/status"))
-      .catch(() => null);
-
-    // Actually, let's get the latest subscription ID from the page
-    // For now, refresh the page to reload data
     setLoading(true);
-    router.refresh();
-    setTimeout(() => setLoading(false), 1000);
+    try {
+      // Get latest subscription orderId
+      const latestRes = await fetch("/api/subscription/latest");
+      if (!latestRes.ok) {
+        alert("Error getting subscription");
+        setLoading(false);
+        return;
+      }
+
+      const latest = await latestRes.json();
+      if (!latest?.orderId) {
+        alert("No subscription found");
+        setLoading(false);
+        return;
+      }
+
+      // Verify payment status
+      const verifyRes = await fetch("/api/subscription/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId: latest.orderId }),
+      });
+
+      if (!verifyRes.ok) {
+        const error = await verifyRes.json();
+        alert(error.error || "Verification failed");
+        setLoading(false);
+        return;
+      }
+
+      const result = await verifyRes.json();
+      if (result.status === "paid") {
+        alert("✓ Pembayaran berhasil diverifikasi! Refreshing...");
+        router.refresh();
+        setTimeout(() => {
+          setLoading(false);
+          window.location.reload();
+        }, 500);
+      } else {
+        alert("Status: " + result.status + ". Coba beberapa saat lagi.");
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error("Refresh error:", err);
+      alert("Error: " + String(err));
+      setLoading(false);
+    }
   }
 
   return (
