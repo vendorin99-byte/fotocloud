@@ -35,7 +35,12 @@ export async function POST(req: NextRequest) {
     );
 
     if (!statusResponse.ok) {
-      return NextResponse.json({ error: "Failed to check" }, { status: 500 });
+      const errorText = await statusResponse.text();
+      console.error(`Midtrans check failed (${statusResponse.status}):`, errorText);
+      return NextResponse.json(
+        { error: `Failed to check: ${statusResponse.status}` },
+        { status: 500 }
+      );
     }
 
     const statusData = await statusResponse.json() as any;
