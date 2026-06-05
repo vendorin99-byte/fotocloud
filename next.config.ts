@@ -2,8 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   experimental: {
-    // Disable Turbopack if having timeout issues
-    // turbopack: false,
+    // Disable Turbopack due to timeout issues on Vercel build
+    turbopack: false,
   },
 };
 
