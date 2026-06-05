@@ -49,7 +49,7 @@ export async function POST(req: Request) {
 
     const isPro =
       user?.plan === "pro" &&
-      (!user.planExpiresAt || user.planExpiresAt > new Date());
+      (!user.planExpiresAt || new Date(user.planExpiresAt) > new Date());
 
     if (!isPro && (user?._count.projects ?? 0) >= FREE_PROJECT_LIMIT) {
       return NextResponse.json(
