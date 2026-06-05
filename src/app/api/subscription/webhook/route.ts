@@ -60,13 +60,21 @@ export async function POST(req: NextRequest) {
     // Send payment receipt email
     const periodLabel = subscription.planDurationDays === 30 ? "1 Bulan" : subscription.planDurationDays === 90 ? "3 Bulan" : "1 Tahun";
     if (subscription.user.email) {
-      await sendPaymentReceiptEmail(
-        subscription.user.email,
-        subscription.user.name || "User",
-        orderId,
-        subscription.amount,
-        periodLabel
-      );
+      try {
+        console.log(`[Webhook] Sending receipt email to ${subscription.user.email}`);
+        const emailResult = await sendPaymentReceiptEmail(
+          subscription.user.email,
+          subscription.user.name || "User",
+          orderId,
+          subscription.amount,
+          periodLabel
+        );
+        console.log(`[Webhook] Email sent: ${emailResult ? "success" : "failed"}`);
+      } catch (emailErr) {
+        console.error(`[Webhook] Email send error:`, emailErr);
+      }
+    } else {
+      console.warn(`[Webhook] No email for user ${subscription.userId}`);
     }
   } else if (isFailed) {
     await prisma.subscription.update({
