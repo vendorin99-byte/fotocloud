@@ -214,7 +214,7 @@ export default function PricingPage() {
             </div>
             <div className="mb-6">
               <div className="text-4xl font-bold text-gray-900">
-                Rp {(pricing["3months"].price / 1000).toFixed(0)}
+                Rp {(pricing["3months"].price / 1000).toFixed(0)}K
               </div>
               <p className="text-sm text-gray-500 mt-1">/ 3 bulan</p>
               <p className="text-xs text-gray-600 mt-2">Hanya Rp {(pricing["3months"].pricePerMonth / 1000).toFixed(0)}K per bulan</p>
@@ -257,7 +257,7 @@ export default function PricingPage() {
             </div>
             <div className="mb-6">
               <div className="text-5xl font-bold">
-                Rp {(pricing["12months"].price / 1000).toFixed(0)}
+                Rp {(pricing["12months"].price / 1000).toFixed(0)}K
               </div>
               <p className="text-gray-300 mt-1">/ tahun</p>
               <p className="text-xs text-gray-400 mt-2">Hanya Rp {(pricing["12months"].pricePerMonth / 1000).toFixed(0)}K per bulan</p>
