@@ -147,9 +147,8 @@ export async function sendPaymentReceiptEmail(
   name: string,
   transactionId: string,
   amount: number,
-  period: string
+  periodLabel: string
 ) {
-  const periodLabel = period === "1month" ? "1 Bulan" : period === "3months" ? "3 Bulan" : "1 Tahun";
 
   return sendEmail({
     to: email,

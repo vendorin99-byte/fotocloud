@@ -40,8 +40,7 @@ export async function POST(req: NextRequest) {
 
   if (isPaid && subscription.status !== "paid") {
     const now = new Date();
-    const durationDays = subscription.period === "1month" ? 30 : subscription.period === "3months" ? 90 : 365;
-    const planExpiresAt = new Date(now.getTime() + durationDays * 24 * 60 * 60 * 1000);
+    const planExpiresAt = new Date(now.getTime() + subscription.planDurationDays * 24 * 60 * 60 * 1000);
 
     await prisma.$transaction([
       prisma.subscription.update({
@@ -55,13 +54,16 @@ export async function POST(req: NextRequest) {
     ]);
 
     // Send payment receipt email
-    await sendPaymentReceiptEmail(
-      subscription.user.email,
-      subscription.user.name || "User",
-      orderId,
-      subscription.amount,
-      subscription.period
-    );
+    const periodLabel = subscription.planDurationDays === 30 ? "1 Bulan" : subscription.planDurationDays === 90 ? "3 Bulan" : "1 Tahun";
+    if (subscription.user.email) {
+      await sendPaymentReceiptEmail(
+        subscription.user.email,
+        subscription.user.name || "User",
+        orderId,
+        subscription.amount,
+        periodLabel
+      );
+    }
   } else if (isFailed) {
     await prisma.subscription.update({
       where: { orderId },
