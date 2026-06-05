@@ -69,6 +69,10 @@ model User {
   planExpiresAt  DateTime?
   trialEndsAt    DateTime?  // 7-day free Pro trial
 
+  // Password reset
+  resetToken     String?   @unique  // Hashed reset token
+  resetTokenExpiry DateTime?  // Reset token expiry (1 hour)
+
   accounts      Account[]
   sessions      Session[]
   projects      Project[]

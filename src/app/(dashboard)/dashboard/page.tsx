@@ -17,7 +17,7 @@ export default async function DashboardPage() {
 
   const user = await prisma.user.findUnique({
     where: { id: session!.user.id },
-    select: { plan: true, planExpiresAt: true },
+    select: { plan: true, planExpiresAt: true, trialEndsAt: true },
   });
 
   const projects = await prisma.project.findMany({
@@ -30,7 +30,16 @@ export default async function DashboardPage() {
   });
 
   const isPro = user?.plan === "pro" && (!user.planExpiresAt || user.planExpiresAt > new Date());
-  const isAtFreeLimit = !isPro && projects.length >= FREE_PROJECT_LIMIT;
+  const isTrialing = user?.trialEndsAt && new Date(user.trialEndsAt) > new Date();
+  const isAtFreeLimit = !isPro && !isTrialing && projects.length >= FREE_PROJECT_LIMIT;
+
+  // Calculate days remaining in trial
+  let trialDaysRemaining = 0;
+  if (isTrialing && user?.trialEndsAt) {
+    const now = new Date();
+    const trialEnd = new Date(user.trialEndsAt);
+    trialDaysRemaining = Math.ceil((trialEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+  }
 
   return (
     <div>
@@ -49,6 +58,29 @@ export default async function DashboardPage() {
           </Link>
         )}
       </div>
+
+      {/* Trial Countdown Banner */}
+      {isTrialing && (
+        <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl px-5 py-4 mb-6">
+          <svg className="w-5 h-5 text-blue-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00-.293.707l-.707.707a1 1 0 101.414 1.414L9 9.414V6z" clipRule="evenodd" />
+          </svg>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-blue-900">
+              ✨ Trial Pro — {trialDaysRemaining} hari tersisa
+            </p>
+            <p className="text-xs text-blue-700 mt-0.5">
+              Selamat! Anda sedang menikmati akses penuh ke fitur Pro. Upgrade untuk akses permanent setelah trial berakhir.
+            </p>
+          </div>
+          <Link
+            href="/pricing"
+            className="shrink-0 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+          >
+            Upgrade Sekarang
+          </Link>
+        </div>
+      )}
 
       {/* Upgrade Banner */}
       {isAtFreeLimit && (

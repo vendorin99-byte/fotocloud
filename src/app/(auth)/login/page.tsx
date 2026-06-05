@@ -65,7 +65,10 @@ function LoginForm() {
           {loading ? "Masuk..." : "Masuk"}
         </button>
       </form>
-      <p className="mt-5 text-center text-sm text-gray-500">
+      <p className="mt-4 text-center text-sm">
+        <Link href="/forgot-password" className="text-gray-600 hover:text-gray-900">Lupa password?</Link>
+      </p>
+      <p className="mt-3 text-center text-sm text-gray-500">
         Belum punya akun?{" "}
         <Link href="/register" className="font-semibold text-gray-900 hover:underline">Mulai Gratis</Link>
       </p>
