@@ -1,14 +1,13 @@
 "use client";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 
-export default function SubscriptionStatusPage() {
+function SubscriptionStatusContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const status = searchParams.get("status");
 
   useEffect(() => {
-    // Redirect ke dashboard subscription page setelah 2 detik
     const timer = setTimeout(() => {
       router.push("/dashboard/subscription");
     }, 2000);
@@ -57,5 +56,19 @@ export default function SubscriptionStatusPage() {
         <p className="text-sm text-gray-500">Mengalihkan ke dashboard dalam beberapa detik...</p>
       </div>
     </div>
+  );
+}
+
+export default function SubscriptionStatusPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white text-gray-900 flex items-center justify-center px-4">
+        <div className="max-w-sm w-full text-center">
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    }>
+      <SubscriptionStatusContent />
+    </Suspense>
   );
 }
