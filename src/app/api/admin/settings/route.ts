@@ -22,8 +22,11 @@ export async function PATCH(req: NextRequest) {
   const updated = await prisma.appSettings.update({
     where: { id: "default" },
     data: {
-      proMonthlyPrice: body.proMonthlyPrice ?? undefined,
-      proYearlyPrice: body.proYearlyPrice ?? undefined,
+      pro1MonthPrice: body.pro1MonthPrice ?? undefined,
+      pro3MonthPrice: body.pro3MonthPrice ?? undefined,
+      pro12MonthPrice: body.pro12MonthPrice ?? undefined,
+      trialDays: body.trialDays ?? undefined,
+      freeProjectLimit: body.freeProjectLimit ?? undefined,
     },
   });
 
