@@ -1,6 +1,14 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+
+declare global {
+  interface Window {
+    snap: any;
+  }
+}
 
 const PRO_FEATURES = [
   "Unlimited projects",
@@ -16,7 +24,66 @@ const PRO_FEATURES = [
 type Period = "1month" | "3months" | "12months";
 
 export default function PricingPage() {
+  const router = useRouter();
+  const { data: session } = useSession();
   const [period, setPeriod] = useState<Period>("1month");
+  const [loading, setLoading] = useState(false);
+
+  // Load Midtrans Snap script
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
+    script.setAttribute("data-client-key", process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY || "");
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  async function handleCheckout(selectedPeriod: Period) {
+    if (!session) {
+      router.push("/login?callbackUrl=/pricing");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch("/api/subscription/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ period: selectedPeriod }),
+      });
+
+      if (!res.ok) {
+        alert("Gagal membuat transaksi. Coba lagi.");
+        setLoading(false);
+        return;
+      }
+
+      const { snapToken } = await res.json();
+
+      // Open Midtrans Snap
+      window.snap.pay(snapToken, {
+        onSuccess: function () {
+          router.push("/subscription?status=success");
+        },
+        onPending: function () {
+          router.push("/subscription?status=pending");
+        },
+        onError: function () {
+          router.push("/subscription?status=error");
+        },
+        onClose: function () {
+          setLoading(false);
+        },
+      });
+    } catch (err) {
+      console.error("Checkout error:", err);
+      alert("Error: Gagal proses checkout");
+      setLoading(false);
+    }
+  }
 
   const pricing: Record<Period, { price: number; pricePerMonth: number; label: string; badge?: string }> = {
     "1month": { price: 9900, pricePerMonth: 9900, label: "1 Bulan" },
@@ -123,8 +190,12 @@ export default function PricingPage() {
                 </li>
               ))}
             </ul>
-            <button className="w-full bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold py-3 rounded-xl transition-colors">
-              Pilih Paket
+            <button
+              onClick={() => handleCheckout("1month")}
+              disabled={loading}
+              className="w-full bg-gray-100 hover:bg-gray-200 disabled:opacity-50 text-gray-900 font-semibold py-3 rounded-xl transition-colors"
+            >
+              {loading ? "Memproses..." : "Pilih Paket"}
             </button>
           </div>
 
@@ -159,8 +230,12 @@ export default function PricingPage() {
                 </li>
               ))}
             </ul>
-            <button className="w-full bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold py-3 rounded-xl transition-colors">
-              Pilih Paket
+            <button
+              onClick={() => handleCheckout("3months")}
+              disabled={loading}
+              className="w-full bg-gray-100 hover:bg-gray-200 disabled:opacity-50 text-gray-900 font-semibold py-3 rounded-xl transition-colors"
+            >
+              {loading ? "Memproses..." : "Pilih Paket"}
             </button>
           </div>
 
@@ -198,8 +273,12 @@ export default function PricingPage() {
                 </li>
               ))}
             </ul>
-            <button className="w-full bg-white hover:bg-gray-100 text-gray-900 font-semibold py-3 rounded-xl transition-colors">
-              Pilih Paket
+            <button
+              onClick={() => handleCheckout("12months")}
+              disabled={loading}
+              className="w-full bg-white hover:bg-gray-100 disabled:opacity-50 text-gray-900 font-semibold py-3 rounded-xl transition-colors"
+            >
+              {loading ? "Memproses..." : "Pilih Paket"}
             </button>
           </div>
         </div>
