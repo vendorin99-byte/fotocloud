@@ -49,7 +49,11 @@ export async function POST(req: NextRequest) {
       }),
       prisma.user.update({
         where: { id: subscription.userId },
-        data: { plan: "pro", planExpiresAt },
+        data: {
+          plan: "pro",
+          planExpiresAt,
+          trialEndsAt: null, // Clear trial when upgrading
+        },
       }),
     ]);
 
