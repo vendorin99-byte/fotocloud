@@ -1,0 +1,25 @@
+[Wed Jun  3 19:50:48 2026] PHP 8.5.2 Development Server (http://localhost:8080) started
+[Wed Jun  3 19:51:14 2026] [::1]:62541 Accepted
+[Wed Jun  3 19:51:15 2026] [::1]:62541 [307]: GET /
+[Wed Jun  3 19:51:15 2026] [::1]:62541 Closing
+[Wed Jun  3 19:52:48 2026] [::1]:62573 Accepted
+[Wed Jun  3 19:52:48 2026] [::1]:62573 [307]: GET /
+[Wed Jun  3 19:52:48 2026] [::1]:62573 Closing
+[Wed Jun  3 19:52:48 2026] [::1]:62574 Accepted
+[Wed Jun  3 19:52:48 2026] [::1]:62574 [200]: GET /index.php/login
+[Wed Jun  3 19:52:48 2026] [::1]:62574 Closing
+[Wed Jun  3 19:52:48 2026] [::1]:62575 Accepted
+[Wed Jun  3 19:52:48 2026] [::1]:62575 [200]: GET /assets/css/style.css
+[Wed Jun  3 19:52:48 2026] [::1]:62575 Closing
+[Wed Jun  3 19:52:48 2026] [::1]:62578 Accepted
+[Wed Jun  3 19:52:48 2026] [::1]:62578 [404]: GET /favicon.ico
+[Wed Jun  3 19:52:48 2026] [::1]:62578 Closing
+[Wed Jun  3 19:52:57 2026] [::1]:62582 Accepted
+[Wed Jun  3 19:52:57 2026] [::1]:62582 [303]: POST /index.php/login/authenticate
+[Wed Jun  3 19:52:57 2026] [::1]:62582 Closing
+[Wed Jun  3 19:52:57 2026] [::1]:62583 Accepted
+[Wed Jun  3 19:52:57 2026] [::1]:62583 [200]: GET /index.php/dashboard
+[Wed Jun  3 19:52:57 2026] [::1]:62583 Closing
+[Wed Jun  3 19:52:58 2026] [::1]:62585 Accepted
+[Wed Jun  3 19:52:58 2026] [::1]:62585 [200]: GET /assets/css/style.css
+[Wed Jun  3 19:52:58 2026] [::1]:62585 Closing

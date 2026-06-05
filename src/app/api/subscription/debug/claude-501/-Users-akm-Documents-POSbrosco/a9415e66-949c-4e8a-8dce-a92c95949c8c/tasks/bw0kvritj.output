@@ -1,0 +1,61 @@
+- Exporting...
+[expo-cli] env: load .env
+[expo-cli] env: export EXPO_PUBLIC_API_URL EXPO_PUBLIC_APP_NAME EXPO_PUBLIC_APP_VERSION
+[expo-cli] Starting Metro Bundler
+[expo-cli] Android mobile/index.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[expo-cli] iOS mobile/index.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[expo-cli] Android mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (1461/1461)
+[expo-cli] iOS mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░ 90.4% (1282/1348)
+[expo-cli] iOS Bundled 10844ms mobile/index.js (1348 modules)
+[expo-cli] Android mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (1461/1461)
+[expo-cli] iOS mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░ 90.4% (1282/1348)
+[expo-cli] Android mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (1461/1461)
+[expo-cli] Android Bundled 15026ms mobile/index.js (1461 modules)
+[expo-cli] Android mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (1461/1461)
+[expo-cli] Creating asset map
+[expo-cli] 
+[expo-cli] › Assets (28):
+[expo-cli] assets/fonts/SpaceMono-Regular.ttf (93.3 kB)
+[expo-cli] assets/images/logo.png (1.74 kB)
+[expo-cli] assets/images/qris-logo.png (18.7 kB)
+[expo-cli] node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome.ttf (166 kB)
+[expo-cli] node_modules/@react-navigation/elements/lib/module/assets/back-icon-mask.png (653 B)
+[expo-cli] node_modules/@react-navigation/elements/lib/module/assets/back-icon.png (8 variations | 359 B)
+[expo-cli] node_modules/@react-navigation/elements/lib/module/assets/clear-icon.png (4 variations | 425 B)
+[expo-cli] node_modules/@react-navigation/elements/lib/module/assets/close-icon.png (4 variations | 235 B)
+[expo-cli] node_modules/@react-navigation/elements/lib/module/assets/search-icon.png (7 variations | 592 B)
+[expo-cli] 
+[expo-cli] › ios bundles (2):
+[expo-cli] _expo/static/js/ios/index-f77ea5ca0884516d538e787a690e1df3.hbc (2.11 MB)
+[expo-cli] _expo/static/js/ios/index-f77ea5ca0884516d538e787a690e1df3.hbc.map (10 MB)
+[expo-cli] 
+[expo-cli] › android bundles (2):
+[expo-cli] _expo/static/js/android/index-6789783b84d33805997d98f21089c280.hbc (2.12 MB)
+[expo-cli] _expo/static/js/android/index-6789783b84d33805997d98f21089c280.hbc.map (10 MB)
+[expo-cli] 
+[expo-cli] › Files (2):
+[expo-cli] assetmap.json (8.88 kB)
+[expo-cli] metadata.json (3.14 kB)
+[expo-cli] 
+[expo-cli] Exported: dist
+✔ Exported bundle(s)
+- Uploading...
+- Uploading assetmap.json (0 / 8.7 KB)
+✔ Uploaded assetmap.json 
+✔ Uploaded 2 app bundles
+✔ Uploading assets skipped - no new assets found
+ℹ 24 iOS assets, 24 Android assets (maximum: 2000 total per update). Learn more about asset limits: https://expo.fyi/eas-update-asset-limits
+Skipping project fingerprints
+- Publishing...
+✔ Published!
+
+Branch             preview
+Runtime version    1.0.0
+Platform           android, ios
+Update group ID    59a402c2-9de1-49cc-aeb7-b78efc3d1269
+Android update ID  019e8d7d-ba7c-749d-8577-42adb606b97d
+iOS update ID      019e8d7d-ba7c-75bb-ace0-d4a553344dca
+Message            Fix modal overlap tab bar + border card lebih tebal
+Commit             05f68e4db0e9e8b8b64641913868ccff586f86b7*
+EAS Dashboard      https://expo.dev/accounts/b-pos/projects/b-pos/updates/59a402c2-9de1-49cc-aeb7-b78efc3d1269
+

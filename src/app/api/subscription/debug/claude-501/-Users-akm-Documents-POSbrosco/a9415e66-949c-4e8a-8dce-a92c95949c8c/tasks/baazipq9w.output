@@ -1,0 +1,9 @@
+You don't have the required permissions to perform this operation.
+
+This can sometimes happen if you are logged in as incorrect user.
+Run eas whoami to check the username you are logged in as.
+Run eas login to change the account.
+
+Original error message: Entity not authorized: AppEntity[3084f0a5-ba1b-4d54-88ed-7225bf70b62b] (viewer = RegularUserViewerContext[b8d6c9a1-7199-44ad-805c-84787d0c8241], action = READ, ruleIndex = -1)
+Request ID: 97f50a93-cd81-42ed-bccc-4de3af27dfc5
+    Error: GraphQL request failed.

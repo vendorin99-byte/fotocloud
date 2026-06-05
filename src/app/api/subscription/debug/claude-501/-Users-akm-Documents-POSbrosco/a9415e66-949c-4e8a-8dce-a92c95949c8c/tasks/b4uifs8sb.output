@@ -1,0 +1,22 @@
+★ eas-cli@20.0.0 is now available.
+To upgrade, run:
+npm install -g eas-cli
+Proceeding with outdated version.
+
+Resolved "preview" environment for the build. Learn more: https://docs.expo.dev/eas/environment-variables/#setting-the-environment-for-your-builds
+No environment variables with visibility "Plain text" and "Sensitive" found for the "preview" environment on EAS.
+Environment variables loaded from the "preview" build profile "env" configuration: EXPO_PUBLIC_API_URL, EXPO_PUBLIC_APP_NAME, EXPO_PUBLIC_APP_VERSION, EAS_SKIP_AUTO_FINGERPRINT.
+
+
+
+✔ Using remote Android credentials (Expo server)
+✔ Using Keystore from configuration: Build Credentials epFH6j6hab (default)
+
+Compressing project files and uploading to EAS Build. Learn more: https://expo.fyi/eas-build-archive
+- Uploading to EAS Build (0 / 541 KB)
+✔ Uploaded to EAS 1s
+- Computing project fingerprint
+✔ Computed project fingerprint
+
+See logs: https://expo.dev/accounts/b-pos/projects/b-pos/builds/a5d598b0-5101-488c-a74c-946ecd0c8ec2
+

@@ -1,0 +1,93 @@
+- Exporting...
+[expo-cli] env: load .env
+[expo-cli] env: export EXPO_PUBLIC_API_URL EXPO_PUBLIC_APP_NAME EXPO_PUBLIC_APP_VERSION
+[expo-cli] Starting Metro Bundler
+[expo-cli] Android mobile/index.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[expo-cli] iOS mobile/index.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[expo-cli] Android mobile/index.js ▓▓▓░░░░░░░░░░░░░ 22.4% ( 39/185)
+[expo-cli] iOS mobile/index.js ▓░░░░░░░░░░░░░░░ 11.1% ( 15/123)
+[expo-cli] Android mobile/index.js ▓▓▓░░░░░░░░░░░░░ 22.4% (144/316)
+[expo-cli] iOS mobile/index.js ▓░░░░░░░░░░░░░░░ 11.1% ( 55/226)
+[expo-cli] Android mobile/index.js ▓▓▓▓▓░░░░░░░░░░░ 31.9% (213/377)
+[expo-cli] iOS mobile/index.js ▓▓░░░░░░░░░░░░░░ 16.4% (123/304)
+[expo-cli] Android mobile/index.js ▓▓▓▓▓▓▓░░░░░░░░░ 44.4% (355/553)
+[expo-cli] iOS mobile/index.js ▓▓▓▓▓░░░░░░░░░░░ 37.5% (289/472)
+[expo-cli] Android mobile/index.js ▓▓▓▓▓▓▓▓▓░░░░░░░ 61.9% (480/610)
+[expo-cli] iOS mobile/index.js ▓▓▓▓▓▓▓▓▓░░░░░░░ 56.8% (440/584)
+[expo-cli] Android mobile/index.js ▓▓▓▓▓▓▓▓▓▓░░░░░░ 68.6% (621/774)
+[expo-cli] iOS mobile/index.js ▓▓▓▓▓▓▓▓▓▓░░░░░░ 64.4% (560/718)
+[expo-cli] Android mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓░░░░ 76.8% (724/826)
+[expo-cli] iOS mobile/index.js ▓▓▓▓▓▓▓▓▓▓░░░░░░ 65.0% (611/758)
+[expo-cli] Android mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓░░░░ 78.6% (766/871)
+[expo-cli] iOS mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓░░░░ 76.1% (737/845)
+[expo-cli] Android mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░ 89.9% ( 916/1027)
+[expo-cli] iOS mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░ 90.6% (893/938)
+[expo-cli] Android mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░ 89.9% (1129/1258)
+[expo-cli] iOS mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░ 90.6% (1004/1130)
+[expo-cli] Android mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░ 91.6% (1273/1337)
+[expo-cli] iOS mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░ 90.6% (1188/1310)
+[expo-cli] Android mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 96.1% (1341/1368)
+[expo-cli] iOS mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 94.6% (1321/1358)
+[expo-cli] Android mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 97.0% (1368/1389)
+[expo-cli] iOS mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 97.1% (1352/1372)
+[expo-cli] Android mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.0% (1390/1397)
+[expo-cli] iOS mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.0% (1392/1399)
+[expo-cli] Android mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (1461/1461)
+[expo-cli] iOS mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.7% (1410/1422)
+[expo-cli] Android mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (1461/1461)
+[expo-cli] iOS mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.7% (1460/1463)
+[expo-cli] Android mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (1461/1461)
+[expo-cli] iOS mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (1465/1465)
+[expo-cli] Android Bundled 67084ms mobile/index.js (1461 modules)
+[expo-cli] Android mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (1461/1461)
+[expo-cli] iOS mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (1465/1465)
+[expo-cli] iOS mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (1465/1465)
+[expo-cli] iOS Bundled 75154ms mobile/index.js (1465 modules)
+[expo-cli] iOS mobile/index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (1465/1465)
+[expo-cli] Creating asset map
+[expo-cli] 
+[expo-cli] › Assets (28):
+[expo-cli] assets/fonts/SpaceMono-Regular.ttf (93.3 kB)
+[expo-cli] assets/images/logo.png (1.74 kB)
+[expo-cli] assets/images/qris-logo.png (18.7 kB)
+[expo-cli] node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome.ttf (166 kB)
+[expo-cli] node_modules/@react-navigation/elements/lib/module/assets/back-icon-mask.png (653 B)
+[expo-cli] node_modules/@react-navigation/elements/lib/module/assets/back-icon.png (8 variations | 359 B)
+[expo-cli] node_modules/@react-navigation/elements/lib/module/assets/clear-icon.png (4 variations | 425 B)
+[expo-cli] node_modules/@react-navigation/elements/lib/module/assets/close-icon.png (4 variations | 235 B)
+[expo-cli] node_modules/@react-navigation/elements/lib/module/assets/search-icon.png (7 variations | 592 B)
+[expo-cli] 
+[expo-cli] › android bundles (2):
+[expo-cli] _expo/static/js/android/index-34c8c4e25c8432338a95b6a23952c92f.hbc (2.12 MB)
+[expo-cli] _expo/static/js/android/index-34c8c4e25c8432338a95b6a23952c92f.hbc.map (10 MB)
+[expo-cli] 
+[expo-cli] › ios bundles (2):
+[expo-cli] _expo/static/js/ios/index-7115b01d3def40f1a3d870416d0cad2a.hbc (2.11 MB)
+[expo-cli] _expo/static/js/ios/index-7115b01d3def40f1a3d870416d0cad2a.hbc.map (10 MB)
+[expo-cli] 
+[expo-cli] › Files (2):
+[expo-cli] assetmap.json (8.88 kB)
+[expo-cli] metadata.json (3.14 kB)
+[expo-cli] 
+[expo-cli] Exported: dist
+✔ Exported bundle(s)
+- Uploading...
+- Uploading assetmap.json (0 / 8.7 KB)
+✔ Uploaded assetmap.json 
+✔ Uploaded 2 app bundles
+✔ Uploading assets skipped - no new assets found
+ℹ 24 iOS assets, 24 Android assets (maximum: 2000 total per update). Learn more about asset limits: https://expo.fyi/eas-update-asset-limits
+Skipping project fingerprints
+- Publishing...
+✔ Published!
+
+Branch             preview
+Runtime version    1.0.0
+Platform           android, ios
+Update group ID    a48625d8-d742-45fe-9774-d9b48066bd8b
+Android update ID  019e8cba-aaf2-77c2-9c0f-30e5ad65022f
+iOS update ID      019e8cba-aaf2-73b1-b3a3-a879f526c7b5
+Message            Tambah satuan + konversi (dus/lusin) di Add-Ons dan Stok
+Commit             05f68e4db0e9e8b8b64641913868ccff586f86b7*
+EAS Dashboard      https://expo.dev/accounts/b-pos/projects/b-pos/updates/a48625d8-d742-45fe-9774-d9b48066bd8b
+
