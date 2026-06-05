@@ -39,7 +39,9 @@ export async function POST(req: NextRequest) {
 
     // Send reset email
     const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${resetToken}`;
-    await sendResetPasswordEmail(user.email, resetUrl);
+    if (user.email) {
+      await sendResetPasswordEmail(user.email, resetUrl);
+    }
 
     return NextResponse.json({
       message: "Jika email terdaftar, link reset password akan dikirim",

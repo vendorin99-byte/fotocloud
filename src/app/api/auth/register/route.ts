@@ -50,7 +50,9 @@ export async function POST(req: Request) {
 
     // Send verification email
     const verifyUrl = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${verifyToken}`;
-    await sendVerificationEmail(user.email!, verifyUrl);
+    if (user.email) {
+      await sendVerificationEmail(user.email, verifyUrl);
+    }
 
     return NextResponse.json(
       {
