@@ -3,6 +3,12 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import Link from "next/link";
+import { RefreshButton } from "@/components/subscription/RefreshButton";
+
 export default async function SubscriptionPage() {
   const session = await getServerSession(authOptions);
 
@@ -91,7 +97,10 @@ export default async function SubscriptionPage() {
       {/* Transaction History */}
       {user?.subscriptions && user.subscriptions.length > 0 && (
         <div className="bg-white border border-gray-200 rounded-2xl p-6">
-          <h2 className="text-base font-semibold text-gray-900 mb-4">Riwayat Transaksi</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-base font-semibold text-gray-900">Riwayat Transaksi</h2>
+            <RefreshButton />
+          </div>
           <div className="space-y-3">
             {user.subscriptions.map((sub) => (
               <div key={sub.id} className="flex items-center justify-between border-b border-gray-100 pb-3 last:border-b-0">
