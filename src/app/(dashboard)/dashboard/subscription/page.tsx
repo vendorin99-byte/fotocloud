@@ -6,8 +6,12 @@ import Link from "next/link";
 export default async function SubscriptionPage() {
   const session = await getServerSession(authOptions);
 
+  if (!session?.user?.id) {
+    return <div className="p-4 text-red-600">Session invalid. Please login again.</div>;
+  }
+
   const user = await prisma.user.findUnique({
-    where: { id: session!.user.id },
+    where: { id: session.user.id },
     select: {
       plan: true,
       planExpiresAt: true,
