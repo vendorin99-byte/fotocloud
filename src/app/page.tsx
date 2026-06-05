@@ -136,34 +136,16 @@ export default function LandingPage() {
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-3">Pilih Paket Anda</h2>
           <p className="text-center text-gray-500 mb-10">Harga terjangkau, cocok untuk fotografer dari semua skala.</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <p className="text-sm font-medium text-gray-500 mb-1">Gratis</p>
-              <p className="text-4xl font-bold text-gray-900 mb-1">Rp 0</p>
-              <p className="text-sm text-gray-400 mb-5">/bulan</p>
-              <ul className="space-y-2 text-sm text-gray-600 mb-6">
-                {["1 project", "Unlimited foto & video", "Link unik per klien", "Review & komentar"].map((f) => (
-                  <li key={f} className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <Link href="/register" className="block w-full text-center border border-gray-300 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors">
-                Pilih Gratis
-              </Link>
-            </div>
-            <div className="bg-gray-900 text-white rounded-2xl p-6 relative">
+          <div className="max-w-sm mx-auto">
+            <div className="bg-gray-900 text-white rounded-2xl p-8 relative">
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-400 text-gray-900 text-xs font-bold px-3 py-1 rounded-full">
-                PALING POPULER
+                PRO TRIAL 7 HARI
               </span>
               <p className="text-sm font-medium text-gray-400 mb-1">Pro</p>
-              <p className="text-4xl font-bold mb-1">Rp 149k</p>
-              <p className="text-sm text-gray-400 mb-5">/bulan</p>
-              <ul className="space-y-2 text-sm text-gray-300 mb-6">
-                {["Unlimited project", "Semua fitur Gratis", "Tanpa Watermark", "Download & Sharing"].map((f) => (
+              <p className="text-5xl font-bold mb-1">Rp 99k</p>
+              <p className="text-sm text-gray-400 mb-6">/tahun</p>
+              <ul className="space-y-2 text-sm text-gray-300 mb-8">
+                {["Unlimited project", "Google Drive sync", "Tanpa Watermark", "Per-photo analytics", "Download & Sharing"].map((f) => (
                   <li key={f} className="flex items-center gap-2">
                     <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -172,9 +154,10 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/pricing" className="block w-full text-center bg-white text-gray-900 py-2.5 rounded-xl text-sm font-semibold hover:bg-gray-100 transition-colors">
-                Langganan Pro
+              <Link href="/register" className="block w-full text-center bg-white text-gray-900 py-3 rounded-xl text-sm font-semibold hover:bg-gray-100 transition-colors">
+                Mulai Trial Gratis
               </Link>
+              <p className="text-xs text-gray-500 text-center mt-4">Trial 7 hari, tidak perlu kartu kredit</p>
             </div>
           </div>
         </div>
