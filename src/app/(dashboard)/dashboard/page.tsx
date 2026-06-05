@@ -77,6 +77,7 @@ export default async function DashboardPage() {
             Upgrade Sekarang
           </Link>
         </div>
+      )}
 
       {/* Upgrade Banner */}
 
