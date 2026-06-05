@@ -133,31 +133,66 @@ export default function LandingPage() {
 
       {/* Pricing Preview */}
       <section className="bg-gray-50 py-20">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-3">Pilih Paket Anda</h2>
-          <p className="text-center text-gray-500 mb-10">Harga terjangkau, cocok untuk fotografer dari semua skala.</p>
-          <div className="max-w-sm mx-auto">
-            <div className="bg-gray-900 text-white rounded-2xl p-8 relative">
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-400 text-gray-900 text-xs font-bold px-3 py-1 rounded-full">
-                PRO TRIAL 7 HARI
+        <div className="max-w-5xl mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center text-gray-900 mb-3">Coba Pro Gratis Selama 7 Hari</h2>
+          <p className="text-center text-gray-500 mb-12">Akses penuh ke semua fitur. Tanpa biaya, tanpa kartu kredit, tanpa auto-debit.</p>
+
+          <div className="max-w-2xl mx-auto">
+            {/* Trial Card */}
+            <div className="bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-3xl p-10 relative mb-8 shadow-xl">
+              <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-green-500 text-white text-xs font-bold px-4 py-1.5 rounded-full">
+                COBA GRATIS
               </span>
-              <p className="text-sm font-medium text-gray-400 mb-1">Pro</p>
-              <p className="text-5xl font-bold mb-1">Rp 99k</p>
-              <p className="text-sm text-gray-400 mb-6">/tahun</p>
-              <ul className="space-y-2 text-sm text-gray-300 mb-8">
-                {["Unlimited project", "Google Drive sync", "Tanpa Watermark", "Per-photo analytics", "Download & Sharing"].map((f) => (
-                  <li key={f} className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+
+              <div className="text-center mb-8">
+                <p className="text-gray-300 text-sm mb-2">Pro Trial</p>
+                <p className="text-6xl font-bold mb-2">7 Hari</p>
+                <p className="text-2xl text-gray-400">Gratis</p>
+              </div>
+
+              <ul className="space-y-3 mb-8">
+                {[
+                  "Unlimited projects & galeri",
+                  "Google Drive sync otomatis",
+                  "Per-photo analytics & insights",
+                  "Download & sharing tanpa limit",
+                  "Review & komentar dari klien",
+                  "Tanpa watermark"
+                ].map((f) => (
+                  <li key={f} className="flex items-start gap-3">
+                    <svg className="w-5 h-5 text-green-400 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    {f}
+                    <span className="text-sm">{f}</span>
                   </li>
                 ))}
               </ul>
-              <Link href="/register" className="block w-full text-center bg-white text-gray-900 py-3 rounded-xl text-sm font-semibold hover:bg-gray-100 transition-colors">
-                Mulai Trial Gratis
+
+              <Link href="/register" className="block w-full text-center bg-white text-gray-900 py-3.5 rounded-xl font-bold text-base hover:bg-gray-100 transition-colors mb-4">
+                Mulai Trial Gratis Sekarang
               </Link>
-              <p className="text-xs text-gray-500 text-center mt-4">Trial 7 hari, tidak perlu kartu kredit</p>
+
+              <p className="text-xs text-gray-400 text-center">
+                Tidak perlu kartu kredit • Tidak ada auto-debit • Bisa upgrade kapan saja
+              </p>
+            </div>
+
+            {/* After Trial Info */}
+            <div className="text-center bg-white rounded-2xl p-6 border border-gray-200">
+              <p className="text-sm text-gray-600 mb-4">Setelah trial berakhir, pilih paket yang sesuai</p>
+              <div className="flex items-center justify-center gap-3 text-sm text-gray-600">
+                <span className="flex items-center gap-1">
+                  <span className="font-semibold text-gray-900">Rp 9.9K</span>/bulan
+                </span>
+                <span className="text-gray-300">•</span>
+                <span className="flex items-center gap-1">
+                  <span className="font-semibold text-gray-900">Rp 27K</span>/3 bulan
+                </span>
+                <span className="text-gray-300">•</span>
+                <span className="flex items-center gap-1">
+                  <span className="font-semibold text-gray-900">Rp 99K</span>/tahun
+                </span>
+              </div>
             </div>
           </div>
         </div>
