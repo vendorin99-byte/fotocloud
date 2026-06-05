@@ -27,7 +27,7 @@ export default function PricingPage() {
   const router = useRouter();
   const { data: session } = useSession();
   const [period, setPeriod] = useState<Period>("1month");
-  const [loading, setLoading] = useState(false);
+  const [loadingPeriod, setLoadingPeriod] = useState<Period | null>(null);
 
   // Load Midtrans Snap script
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function PricingPage() {
       return;
     }
 
-    setLoading(true);
+    setLoadingPeriod(selectedPeriod);
     try {
       const res = await fetch("/api/subscription/checkout", {
         method: "POST",
@@ -57,7 +57,7 @@ export default function PricingPage() {
 
       if (!res.ok) {
         alert("Gagal membuat transaksi. Coba lagi.");
-        setLoading(false);
+        setLoadingPeriod(null);
         return;
       }
 
@@ -75,13 +75,13 @@ export default function PricingPage() {
           router.push("/subscription?status=error");
         },
         onClose: function () {
-          setLoading(false);
+          setLoadingPeriod(null);
         },
       });
     } catch (err) {
       console.error("Checkout error:", err);
       alert("Error: Gagal proses checkout");
-      setLoading(false);
+      setLoadingPeriod(null);
     }
   }
 
@@ -192,10 +192,10 @@ export default function PricingPage() {
             </ul>
             <button
               onClick={() => handleCheckout("1month")}
-              disabled={loading}
+              disabled={loadingPeriod !== null}
               className="w-full bg-gray-100 hover:bg-gray-200 disabled:opacity-50 text-gray-900 font-semibold py-3 rounded-xl transition-colors"
             >
-              {loading ? "Memproses..." : "Pilih Paket"}
+              {loadingPeriod === "1month" ? "Memproses..." : "Pilih Paket"}
             </button>
           </div>
 
@@ -232,10 +232,10 @@ export default function PricingPage() {
             </ul>
             <button
               onClick={() => handleCheckout("3months")}
-              disabled={loading}
+              disabled={loadingPeriod !== null}
               className="w-full bg-gray-100 hover:bg-gray-200 disabled:opacity-50 text-gray-900 font-semibold py-3 rounded-xl transition-colors"
             >
-              {loading ? "Memproses..." : "Pilih Paket"}
+              {loadingPeriod === "3months" ? "Memproses..." : "Pilih Paket"}
             </button>
           </div>
 
@@ -275,10 +275,10 @@ export default function PricingPage() {
             </ul>
             <button
               onClick={() => handleCheckout("12months")}
-              disabled={loading}
+              disabled={loadingPeriod !== null}
               className="w-full bg-white hover:bg-gray-100 disabled:opacity-50 text-gray-900 font-semibold py-3 rounded-xl transition-colors"
             >
-              {loading ? "Memproses..." : "Pilih Paket"}
+              {loadingPeriod === "12months" ? "Memproses..." : "Pilih Paket"}
             </button>
           </div>
         </div>
