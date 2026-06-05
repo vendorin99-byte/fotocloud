@@ -42,6 +42,8 @@ export function TokenManager({
   const [creating, setCreating] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [shareWhatsAppId, setShareWhatsAppId] = useState<string | null>(null);
+  const [whatsappNumber, setWhatsappNumber] = useState("");
+  const [whatsappModalOpen, setWhatsappModalOpen] = useState(false);
 
   const appUrl =
     typeof window !== "undefined"
@@ -86,14 +88,44 @@ export function TokenManager({
     }
   }
 
-  function shareWhatsApp(t: Token) {
-    const url = galleryUrl(t);
-    const durationText = t.expiresAt
-      ? `Akses: ${new Date(t.expiresAt).toLocaleDateString("id-ID")}`
+  function openWhatsAppShare(t: Token) {
+    setShareWhatsAppId(t.id);
+    setWhatsappNumber("");
+    setWhatsappModalOpen(true);
+  }
+
+  function sendWhatsAppShare() {
+    if (!whatsappNumber.trim()) {
+      alert("Masukkan nomor WhatsApp");
+      return;
+    }
+
+    const token = tokens.find((t) => t.id === shareWhatsAppId);
+    if (!token) return;
+
+    const url = galleryUrl(token);
+    const durationText = token.expiresAt
+      ? `Akses: ${new Date(token.expiresAt).toLocaleDateString("id-ID")}`
       : "Akses: Selamanya";
     const message = `Halo! 👋\n\nGaleri foto Anda siap di:\n${url}\n\n${durationText}\n💬 Silakan review, comment, dan approve foto favorit.\n\nTerima kasih! 📷`;
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+
+    // Format nomor (remove special chars, ensure international format)
+    let phoneNumber = whatsappNumber.replace(/\D/g, "");
+    if (!phoneNumber.startsWith("62")) {
+      if (phoneNumber.startsWith("0")) {
+        phoneNumber = "62" + phoneNumber.slice(1);
+      } else {
+        phoneNumber = "62" + phoneNumber;
+      }
+    }
+
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
+
+    // Close modal
+    setWhatsappModalOpen(false);
+    setWhatsappNumber("");
+    setShareWhatsAppId(null);
   }
 
   async function patchToken(tokenId: string, data: Partial<Token>) {
@@ -247,8 +279,8 @@ export function TokenManager({
 
                 <div className="flex items-center gap-2 shrink-0">
                   <button
-                    onClick={() => shareWhatsApp(t)}
-                    title="Share ke WhatsApp"
+                    onClick={() => openWhatsAppShare(t)}
+                    title="Kirim ke WhatsApp"
                     className="text-xs bg-green-50 hover:bg-green-100 text-green-700 px-3 py-1.5 rounded-lg transition-colors font-medium"
                   >
                     💬 WhatsApp
@@ -305,6 +337,54 @@ export function TokenManager({
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* WhatsApp Modal */}
+      {whatsappModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl">
+            <div className="flex items-center gap-3 mb-4">
+              <svg className="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-5.031 1.378c-3.055 2.016-5.044 5.09-5.044 8.221 0 1.584.292 3.149.843 4.651l-1.493 5.460 5.656-1.466c1.486.823 3.12 1.23 4.869 1.23h.004c8.25 0 8.285-8.221 8.285-8.221 0-2.928-1.391-5.771-3.802-7.793-2.414-2.023-5.625-3.135-9.027-3.135" />
+              </svg>
+              <h3 className="text-lg font-bold text-gray-900">Kirim via WhatsApp</h3>
+              <button onClick={() => setWhatsappModalOpen(false)} className="ml-auto text-gray-400 hover:text-gray-600">
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Nomor WhatsApp Client
+                </label>
+                <input
+                  type="tel"
+                  value={whatsappNumber}
+                  onChange={(e) => setWhatsappNumber(e.target.value)}
+                  placeholder="+62 812 xxxx xxxx"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <p className="text-xs text-gray-500 mt-1">Format: +62812xxxx atau 08xx</p>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={sendWhatsAppShare}
+                  className="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium py-2 rounded-lg transition-colors"
+                >
+                  Buka WhatsApp
+                </button>
+                <button
+                  onClick={() => setWhatsappModalOpen(false)}
+                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 rounded-lg transition-colors"
+                >
+                  Batal
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
