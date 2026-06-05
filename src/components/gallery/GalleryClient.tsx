@@ -332,7 +332,7 @@ function Lightbox({ item, token, canDownload, canComment, onClose, onReview, onC
                           {new Date(c.createdAt).toLocaleDateString("id-ID", { day: "numeric", month: "short" })}
                         </span>
                       </div>
-                      <p className="text-xs text-gray-300">{c.body}</p>
+                      <p className="text-sm text-gray-200 word-break">{c.body}</p>
                     </div>
                   ))}
                 </div>

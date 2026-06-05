@@ -9,6 +9,7 @@ import { MediaGrid } from "@/components/media/MediaGrid";
 import { CopyLinkButton } from "@/components/projects/CopyLinkButton";
 import { WatermarkToggle } from "@/components/projects/WatermarkToggle";
 import { DeleteButton } from "@/components/projects/DeleteButton";
+import { ReviewSummary } from "@/components/projects/ReviewSummary";
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
@@ -192,6 +193,19 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           </p>
         </div>
       </div>
+
+      {/* Review Status */}
+      <ReviewSummary
+        projectId={id}
+        tokens={project.accessTokens.map((t: typeof project.accessTokens[number]) => ({
+          tokenId: t.id,
+          label: t.label,
+          approvedCount: t.reviews.filter((r: { status: string }) => r.status === "approved").length,
+          revisionCount: t.reviews.filter((r: { status: string }) => r.status === "revision_requested").length,
+          commentCount: t._count.comments,
+          totalReviews: t._count.reviews,
+        }))}
+      />
 
       {/* Media */}
       <div className="mb-6">
