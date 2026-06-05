@@ -3,7 +3,6 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { UpgradeButton } from "@/components/subscription/UpgradeButton";
-import { FREE_PROJECT_LIMIT } from "@/app/api/projects/route";
 
 const syncBadge: Record<string, { label: string; cls: string }> = {
   pending:  { label: "PENDING",  cls: "bg-gray-100 text-gray-500" },
@@ -31,7 +30,6 @@ export default async function DashboardPage() {
 
   const isPro = user?.plan === "pro" && (!user.planExpiresAt || user.planExpiresAt > new Date());
   const isTrialing = user?.trialEndsAt && new Date(user.trialEndsAt) > new Date();
-  const isAtFreeLimit = !isPro && !isTrialing && projects.length >= FREE_PROJECT_LIMIT;
 
   // Calculate days remaining in trial
   let trialDaysRemaining = 0;
@@ -46,7 +44,7 @@ export default async function DashboardPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        {!isAtFreeLimit && (
+        
           <Link
             href="/dashboard/projects/new"
             className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors"
@@ -56,7 +54,6 @@ export default async function DashboardPage() {
             </svg>
             Buat Project
           </Link>
-        )}
       </div>
 
       {/* Trial Countdown Banner */}
@@ -80,21 +77,8 @@ export default async function DashboardPage() {
             Upgrade Sekarang
           </Link>
         </div>
-      )}
 
       {/* Upgrade Banner */}
-      {isAtFreeLimit && (
-        <div className="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl px-5 py-4 mb-6">
-          <svg className="w-5 h-5 text-amber-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-          </svg>
-          <div className="flex-1">
-            <p className="text-sm font-semibold text-amber-900">Tingkatkan Akun Anda</p>
-            <p className="text-xs text-amber-700 mt-0.5">Anda saat ini menggunakan paket Gratis. Upgrade untuk penyimpanan tak terbatas dan fitur kolaborasi.</p>
-          </div>
-          <UpgradeButton variant="banner" />
-        </div>
-      )}
 
       {/* Project Grid */}
       <div className="mb-3 flex items-center justify-between">
