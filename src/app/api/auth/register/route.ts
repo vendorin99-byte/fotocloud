@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
+import { sendVerificationEmail } from "@/lib/email";
+import crypto from "crypto";
 
 const schema = z.object({
   name: z.string().min(2),
@@ -26,6 +28,11 @@ export async function POST(req: Request) {
     const trialEndsAt = new Date();
     trialEndsAt.setDate(trialEndsAt.getDate() + 7);
 
+    // Generate email verification token (valid 24 hours)
+    const verifyToken = crypto.randomBytes(32).toString("hex");
+    const verifyTokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    const hashedVerifyToken = crypto.createHash("sha256").update(verifyToken).digest("hex");
+
     const user = await prisma.user.create({
       data: {
         name: data.name,
@@ -34,11 +41,24 @@ export async function POST(req: Request) {
         businessName: data.businessName,
         plan: "free",
         trialEndsAt,
+        // Store hashed token for verification
+        resetToken: hashedVerifyToken, // Reusing this field temporarily for email verification
+        resetTokenExpiry: verifyTokenExpiry,
       },
       select: { id: true, email: true, name: true },
     });
 
-    return NextResponse.json(user, { status: 201 });
+    // Send verification email
+    const verifyUrl = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${verifyToken}`;
+    await sendVerificationEmail(user.email!, verifyUrl);
+
+    return NextResponse.json(
+      {
+        ...user,
+        message: "Akun berhasil dibuat. Check email untuk verifikasi."
+      },
+      { status: 201 }
+    );
   } catch (err) {
     if (err instanceof z.ZodError) {
       return NextResponse.json({ error: err.issues }, { status: 400 });

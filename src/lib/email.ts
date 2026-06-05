@@ -101,3 +101,82 @@ export async function sendReviewNotificationEmail({
     `,
   });
 }
+
+export async function sendVerificationEmail(email: string, verifyUrl: string) {
+  return sendEmail({
+    to: email,
+    subject: "Verifikasi Email FotoCloud",
+    html: `
+      <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
+        <h2>Selamat datang di FotoCloud! 🎉</h2>
+        <p>Terima kasih telah mendaftar. Klik tombol di bawah untuk verifikasi email Anda:</p>
+        <p>
+          <a href="${verifyUrl}" style="background:#111827;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block">
+            Verifikasi Email
+          </a>
+        </p>
+        <p style="color:#6b7280;font-size:13px">Atau copy: ${verifyUrl}</p>
+        <p style="color:#9ca3af;font-size:12px">Link berlaku 24 jam</p>
+      </div>
+    `,
+  });
+}
+
+export async function sendResetPasswordEmail(email: string, resetUrl: string) {
+  return sendEmail({
+    to: email,
+    subject: "Reset Password FotoCloud",
+    html: `
+      <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
+        <h2>Reset Password 🔐</h2>
+        <p>Kami menerima permintaan reset password. Klik tombol untuk membuat password baru:</p>
+        <p>
+          <a href="${resetUrl}" style="background:#111827;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block">
+            Reset Password
+          </a>
+        </p>
+        <p style="color:#6b7280;font-size:13px">Atau copy: ${resetUrl}</p>
+        <p style="color:#9ca3af;font-size:12px">Link berlaku 1 jam. Jika tidak diminta, abaikan.</p>
+      </div>
+    `,
+  });
+}
+
+export async function sendPaymentReceiptEmail(
+  email: string,
+  name: string,
+  transactionId: string,
+  amount: number,
+  period: string
+) {
+  const periodLabel = period === "1month" ? "1 Bulan" : period === "3months" ? "3 Bulan" : "1 Tahun";
+
+  return sendEmail({
+    to: email,
+    subject: "Pembayaran Berhasil - FotoCloud Pro",
+    html: `
+      <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
+        <h2>Pembayaran Berhasil! ✓</h2>
+        <p>Halo ${name},</p>
+        <p>Terima kasih! Upgrade Pro Anda sudah aktif.</p>
+        <div style="background:#f3f4f6;padding:16px;border-radius:8px;margin:16px 0;font-size:13px">
+          <p><strong>Transaction ID:</strong> ${transactionId}</p>
+          <p><strong>Paket:</strong> FotoCloud Pro - ${periodLabel}</p>
+          <p><strong>Harga:</strong> Rp ${amount.toLocaleString("id-ID")}</p>
+        </div>
+        <p>Fitur Pro Anda:</p>
+        <ul style="font-size:13px">
+          <li>✓ Unlimited projects</li>
+          <li>✓ No watermark</li>
+          <li>✓ Per-photo analytics</li>
+          <li>✓ Bulk download</li>
+        </ul>
+        <p>
+          <a href="https://fotocloud-iota.vercel.app/dashboard" style="color:#111827;text-decoration:none;font-weight:bold">
+            Mulai sekarang →
+          </a>
+        </p>
+      </div>
+    `,
+  });
+}

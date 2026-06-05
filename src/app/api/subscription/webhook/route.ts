@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifyMidtransSignature } from "@/lib/midtrans";
+import { sendPaymentReceiptEmail } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -30,6 +31,7 @@ export async function POST(req: NextRequest) {
 
   const subscription = await prisma.subscription.findUnique({
     where: { orderId },
+    include: { user: { select: { name: true, email: true } } },
   });
 
   if (!subscription) {
@@ -38,9 +40,8 @@ export async function POST(req: NextRequest) {
 
   if (isPaid && subscription.status !== "paid") {
     const now = new Date();
-    const planExpiresAt = new Date(
-      now.getTime() + subscription.planDurationDays * 24 * 60 * 60 * 1000
-    );
+    const durationDays = subscription.period === "1month" ? 30 : subscription.period === "3months" ? 90 : 365;
+    const planExpiresAt = new Date(now.getTime() + durationDays * 24 * 60 * 60 * 1000);
 
     await prisma.$transaction([
       prisma.subscription.update({
@@ -52,6 +53,15 @@ export async function POST(req: NextRequest) {
         data: { plan: "pro", planExpiresAt },
       }),
     ]);
+
+    // Send payment receipt email
+    await sendPaymentReceiptEmail(
+      subscription.user.email,
+      subscription.user.name || "User",
+      orderId,
+      subscription.amount,
+      subscription.period
+    );
   } else if (isFailed) {
     await prisma.subscription.update({
       where: { orderId },

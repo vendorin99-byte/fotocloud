@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { sendResetPasswordEmail } from "@/lib/email";
 import crypto from "crypto";
 import { z } from "zod";
 
@@ -25,21 +26,20 @@ export async function POST(req: NextRequest) {
     // Generate reset token (valid for 1 hour)
     const resetToken = crypto.randomBytes(32).toString("hex");
     const resetTokenExpiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
-
-    // Store in database (hash the token)
     const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
 
+    // Store in database
     await prisma.user.update({
       where: { id: user.id },
       data: {
-        // Add these fields to schema: resetToken, resetTokenExpiry
-        // For now, we'll store in a comment: TODO add to schema
+        resetToken: hashedToken,
+        resetTokenExpiry,
       },
     });
 
-    // TODO: Send email with reset link
-    // const resetUrl = `https://fotocloud.com/reset-password?token=${resetToken}`;
-    // await sendResetPasswordEmail(user.email, resetUrl);
+    // Send reset email
+    const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${resetToken}`;
+    await sendResetPasswordEmail(user.email, resetUrl);
 
     return NextResponse.json({
       message: "Jika email terdaftar, link reset password akan dikirim",
