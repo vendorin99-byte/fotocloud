@@ -27,7 +27,7 @@ const createSchema = z.object({
   driveFolderUrl: z.string().optional(),
 });
 
-export const FREE_PROJECT_LIMIT = 1;
+const FREE_PROJECT_LIMIT = 1;
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
