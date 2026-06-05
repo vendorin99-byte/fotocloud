@@ -8,6 +8,7 @@ import { TokenManager } from "@/components/tokens/TokenManager";
 import { MediaGrid } from "@/components/media/MediaGrid";
 import { CopyLinkButton } from "@/components/projects/CopyLinkButton";
 import { WatermarkToggle } from "@/components/projects/WatermarkToggle";
+import { DeleteButton } from "@/components/projects/DeleteButton";
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
@@ -80,6 +81,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               Share Gallery
             </a>
           )}
+          <DeleteButton projectId={id} />
         </div>
       </div>
 
