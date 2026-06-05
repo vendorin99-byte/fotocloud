@@ -67,6 +67,7 @@ model User {
   // Subscription
   plan           String   @default("free")  // free | pro
   planExpiresAt  DateTime?
+  trialEndsAt    DateTime?  // 7-day free Pro trial
 
   accounts      Account[]
   sessions      Session[]
@@ -145,11 +146,16 @@ model Testimonial {
 // ─── App Settings (harga subscription dll) ───────────────────────────────────
 
 model AppSettings {
-  id               String @id @default("default")
-  proMonthlyPrice  Int    @default(99000)
-  proYearlyPrice   Int    @default(899000)
-  freeProjectLimit Int    @default(1)
-  updatedAt        DateTime @updatedAt
+  id              String @id @default("default")
+  // Pro pricing per period (in IDR)
+  pro1MonthPrice  Int    @default(15000)   // Rp 15.000
+  pro3MonthPrice  Int    @default(39000)   // Rp 39.000
+  pro12MonthPrice Int    @default(149000)  // Rp 149.000
+  // Trial
+  trialDays       Int    @default(7)       // 7-day trial
+  // Limits
+  freeProjectLimit Int   @default(1)
+  updatedAt       DateTime @updatedAt
 }
 
 // ─── Access Token (unique URL per client/stakeholder) ────────────────────────
