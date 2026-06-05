@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  experimental: {
+    // Disable Turbopack if having timeout issues
+    // turbopack: false,
+  },
 };
 
 export default nextConfig;
