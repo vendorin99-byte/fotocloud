@@ -22,12 +22,18 @@ export async function POST(req: Request) {
 
     const hashed = await bcrypt.hash(data.password, 12);
 
+    // Set trial expiry to 7 days from now
+    const trialEndsAt = new Date();
+    trialEndsAt.setDate(trialEndsAt.getDate() + 7);
+
     const user = await prisma.user.create({
       data: {
         name: data.name,
         email: data.email,
         password: hashed,
         businessName: data.businessName,
+        plan: "free",
+        trialEndsAt,
       },
       select: { id: true, email: true, name: true },
     });

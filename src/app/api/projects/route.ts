@@ -43,6 +43,7 @@ export async function POST(req: Request) {
       select: {
         plan: true,
         planExpiresAt: true,
+        trialEndsAt: true,
         _count: { select: { projects: true } },
       },
     });
@@ -51,7 +52,11 @@ export async function POST(req: Request) {
       user?.plan === "pro" &&
       (!user.planExpiresAt || new Date(user.planExpiresAt) > new Date());
 
-    if (!isPro && (user?._count.projects ?? 0) >= FREE_PROJECT_LIMIT) {
+    const isTrialing =
+      !isPro && user?.trialEndsAt && new Date(user.trialEndsAt) > new Date();
+
+    // Pro or in trial period get unlimited projects
+    if (!isPro && !isTrialing && (user?._count.projects ?? 0) >= FREE_PROJECT_LIMIT) {
       return NextResponse.json(
         { error: "free_limit", message: `Akun gratis hanya bisa membuat ${FREE_PROJECT_LIMIT} project. Upgrade ke Pro untuk unlimited.` },
         { status: 403 }

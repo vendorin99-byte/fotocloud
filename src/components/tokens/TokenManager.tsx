@@ -18,6 +18,13 @@ interface Token {
   revisionCount: number;
 }
 
+const DURATION_OPTIONS = [
+  { label: "Selamanya", days: null },
+  { label: "7 hari", days: 7 },
+  { label: "30 hari", days: 30 },
+  { label: "90 hari", days: 90 },
+];
+
 export function TokenManager({
   projectId,
   initialTokens,
@@ -29,10 +36,12 @@ export function TokenManager({
   const [tokens, setTokens] = useState(initialTokens);
   const [showForm, setShowForm] = useState(false);
   const [newLabel, setNewLabel] = useState("");
+  const [newDurationDays, setNewDurationDays] = useState<number | null>(null);
   const [newCanDownload, setNewCanDownload] = useState(true);
   const [newCanComment, setNewCanComment] = useState(true);
   const [creating, setCreating] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [shareWhatsAppId, setShareWhatsAppId] = useState<string | null>(null);
 
   const appUrl =
     typeof window !== "undefined"
@@ -56,6 +65,7 @@ export function TokenManager({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         label: newLabel || undefined,
+        durationDays: newDurationDays,
         canDownload: newCanDownload,
         canComment: newCanComment,
       }),
@@ -69,10 +79,21 @@ export function TokenManager({
         ...prev,
       ]);
       setNewLabel("");
+      setNewDurationDays(null);
       setNewCanDownload(true);
       setNewCanComment(true);
       setShowForm(false);
     }
+  }
+
+  function shareWhatsApp(t: Token) {
+    const url = galleryUrl(t);
+    const durationText = t.expiresAt
+      ? `Akses: ${new Date(t.expiresAt).toLocaleDateString("id-ID")}`
+      : "Akses: Selamanya";
+    const message = `Halo! 👋\n\nGaleri foto Anda siap di:\n${url}\n\n${durationText}\n💬 Silakan review, comment, dan approve foto favorit.\n\nTerima kasih! 📷`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank");
   }
 
   async function patchToken(tokenId: string, data: Partial<Token>) {
@@ -121,6 +142,26 @@ export function TokenManager({
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
               onKeyDown={(e) => e.key === "Enter" && createToken()}
             />
+          </div>
+
+          {/* Duration */}
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-2">Durasi akses klien</label>
+            <div className="grid grid-cols-2 gap-2">
+              {DURATION_OPTIONS.map((opt) => (
+                <button
+                  key={opt.label}
+                  onClick={() => setNewDurationDays(opt.days)}
+                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                    newDurationDays === opt.days
+                      ? "bg-gray-900 text-white"
+                      : "bg-white border border-gray-300 text-gray-700 hover:border-gray-400"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Permissions */}
@@ -192,7 +233,12 @@ export function TokenManager({
                     </span>
                   </div>
                   <p className="text-xs text-gray-400 mt-0.5 truncate">{galleryUrl(t)}</p>
-                  <div className="flex items-center gap-3 mt-1.5 text-xs text-gray-500">
+                  <div className="flex items-center gap-3 mt-1.5 text-xs text-gray-500 flex-wrap">
+                    {t.expiresAt && (
+                      <span className="bg-amber-50 text-amber-700 px-2 py-0.5 rounded">
+                        Berakhir: {new Date(t.expiresAt).toLocaleDateString("id-ID")}
+                      </span>
+                    )}
                     <span>{t.approvedCount} disetujui</span>
                     <span>{t.revisionCount} revisi</span>
                     <span>{t.commentCount} komentar</span>
@@ -200,6 +246,13 @@ export function TokenManager({
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => shareWhatsApp(t)}
+                    title="Share ke WhatsApp"
+                    className="text-xs bg-green-50 hover:bg-green-100 text-green-700 px-3 py-1.5 rounded-lg transition-colors font-medium"
+                  >
+                    💬 WhatsApp
+                  </button>
                   <button
                     onClick={() => copyUrl(t)}
                     className="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg transition-colors"

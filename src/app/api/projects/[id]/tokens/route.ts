@@ -33,9 +33,9 @@ export async function GET(
 
 const createSchema = z.object({
   label: z.string().optional(),
+  durationDays: z.number().nullable().optional(), // null = forever, number = days
   canDownload: z.boolean().default(true),
   canComment: z.boolean().default(true),
-  expiresAt: z.string().datetime().optional(),
 });
 
 export async function POST(
@@ -60,6 +60,13 @@ export async function POST(
     const existing = await prisma.accessToken.findUnique({ where: { slug } });
     if (existing) slug = `${baseSlug}-${Math.random().toString(36).slice(2, 6)}`;
 
+    // Calculate expiresAt from durationDays
+    let expiresAt: Date | null = null;
+    if (data.durationDays !== null && data.durationDays !== undefined) {
+      expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + data.durationDays);
+    }
+
     const token = await prisma.accessToken.create({
       data: {
         projectId: id,
@@ -67,7 +74,7 @@ export async function POST(
         label: data.label,
         canDownload: data.canDownload,
         canComment: data.canComment,
-        expiresAt: data.expiresAt ? new Date(data.expiresAt) : null,
+        expiresAt,
       },
     });
 
