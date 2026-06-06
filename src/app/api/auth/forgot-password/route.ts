@@ -38,8 +38,8 @@ export async function POST(req: NextRequest) {
     });
 
     // Send reset email
-    const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/reset-password?token=${resetToken}&email=${encodeURIComponent(user.email)}`;
-    await sendResetPasswordEmail(user.email, resetUrl);
+    const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/reset-password?token=${resetToken}&email=${encodeURIComponent(user.email!)}`;
+    await sendResetPasswordEmail(user.email!, resetUrl);
 
     return NextResponse.json({
       message: "Jika email terdaftar, link reset password akan dikirim",
