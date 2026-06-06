@@ -8,6 +8,7 @@ const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "FotoCloud — Platform Galeri Fotografer",
   description: "Bagikan galeri foto dan video ke klien dengan mudah",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=5",
 };
 
 export default function RootLayout({
