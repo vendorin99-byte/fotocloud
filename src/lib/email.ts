@@ -23,7 +23,7 @@ async function sendEmail(payload: EmailPayload): Promise<boolean> {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: process.env.EMAIL_FROM ?? "FotoCloud <noreply@fotocloud.app>",
+      from: process.env.EMAIL_FROM ?? "FotoCloud <onboarding@resend.dev>",
       to: payload.to,
       subject: payload.subject,
       html: payload.html,
@@ -107,16 +107,29 @@ export async function sendVerificationEmail(email: string, verifyUrl: string) {
     to: email,
     subject: "Verifikasi Email FotoCloud",
     html: `
-      <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
-        <h2>Selamat datang di FotoCloud! 🎉</h2>
-        <p>Terima kasih telah mendaftar. Klik tombol di bawah untuk verifikasi email Anda:</p>
-        <p>
-          <a href="${verifyUrl}" style="background:#111827;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block">
-            Verifikasi Email
-          </a>
-        </p>
-        <p style="color:#6b7280;font-size:13px">Atau copy: ${verifyUrl}</p>
-        <p style="color:#9ca3af;font-size:12px">Link berlaku 24 jam</p>
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; color: white; border-radius: 8px 8px 0 0;">
+          <h1 style="margin: 0; font-size: 28px;">FotoCloud</h1>
+        </div>
+        <div style="padding: 30px; background: #f8f9fa; border-radius: 0 0 8px 8px;">
+          <h2 style="color: #333; margin-bottom: 20px;">Verifikasi Email Anda</h2>
+          <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">
+            Halo,<br/><br/>
+            Terima kasih telah mendaftar di FotoCloud! Untuk menyelesaikan pendaftaran, silakan verifikasi email Anda dengan mengklik tombol di bawah.
+          </p>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${verifyUrl}" style="background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
+              Verifikasi Email
+            </a>
+          </div>
+          <p style="color: #999; font-size: 12px; margin-top: 20px;">
+            Atau copy dan paste link di bawah ke browser Anda:<br/>
+            <code style="background: #fff; padding: 10px; display: block; word-break: break-all; border-left: 3px solid #667eea; margin-top: 10px;">${verifyUrl}</code>
+          </p>
+          <p style="color: #999; font-size: 12px; margin-top: 20px;">
+            Link berlaku selama 24 jam. Jika Anda tidak membuat akun ini, abaikan email ini.
+          </p>
+        </div>
       </div>
     `,
   });
@@ -127,16 +140,29 @@ export async function sendResetPasswordEmail(email: string, resetUrl: string) {
     to: email,
     subject: "Reset Password FotoCloud",
     html: `
-      <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
-        <h2>Reset Password 🔐</h2>
-        <p>Kami menerima permintaan reset password. Klik tombol untuk membuat password baru:</p>
-        <p>
-          <a href="${resetUrl}" style="background:#111827;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block">
-            Reset Password
-          </a>
-        </p>
-        <p style="color:#6b7280;font-size:13px">Atau copy: ${resetUrl}</p>
-        <p style="color:#9ca3af;font-size:12px">Link berlaku 1 jam. Jika tidak diminta, abaikan.</p>
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; color: white; border-radius: 8px 8px 0 0;">
+          <h1 style="margin: 0; font-size: 28px;">FotoCloud</h1>
+        </div>
+        <div style="padding: 30px; background: #f8f9fa; border-radius: 0 0 8px 8px;">
+          <h2 style="color: #333; margin-bottom: 20px;">Reset Password Anda</h2>
+          <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">
+            Halo,<br/><br/>
+            Kami menerima permintaan untuk mereset password akun Anda. Klik tombol di bawah untuk membuat password baru.
+          </p>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${resetUrl}" style="background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
+              Reset Password
+            </a>
+          </div>
+          <p style="color: #999; font-size: 12px; margin-top: 20px;">
+            Atau copy dan paste link di bawah ke browser Anda:<br/>
+            <code style="background: #fff; padding: 10px; display: block; word-break: break-all; border-left: 3px solid #667eea; margin-top: 10px;">${resetUrl}</code>
+          </p>
+          <p style="color: #999; font-size: 12px; margin-top: 20px;">
+            Link berlaku selama 1 jam. Jika Anda tidak meminta reset password ini, abaikan email ini dan password Anda akan tetap aman.
+          </p>
+        </div>
       </div>
     `,
   });
