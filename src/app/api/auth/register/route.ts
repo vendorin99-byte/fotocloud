@@ -28,11 +28,6 @@ export async function POST(req: Request) {
     const trialEndsAt = new Date();
     trialEndsAt.setDate(trialEndsAt.getDate() + 7);
 
-    // Generate email verification token (valid 24 hours)
-    const verifyToken = crypto.randomBytes(32).toString("hex");
-    const verifyTokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
-    const hashedVerifyToken = crypto.createHash("sha256").update(verifyToken).digest("hex");
-
     const user = await prisma.user.create({
       data: {
         name: data.name,
