@@ -10,7 +10,7 @@ export default async function AdminChatPage() {
   // Fetch all chat messages (admin view)
   const messages = await prisma.chatMessage.findMany({
     orderBy: { createdAt: "desc" },
-    take: 200,
+    take: 500,
     include: { user: { select: { id: true, name: true, email: true } } },
   });
 
@@ -28,6 +28,17 @@ export default async function AdminChatPage() {
   );
 
   const conversations = Object.values(groupedByUser);
+
+  const formatTime = (date: Date) => {
+    return new Date(date).toLocaleString("id-ID", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -58,22 +69,29 @@ export default async function AdminChatPage() {
                   {conv.messages.length} messages
                 </span>
               </div>
-              <div className="space-y-2 max-h-48 overflow-y-auto">
-                {conv.messages.map((msg: any) => (
-                  <div
-                    key={msg.id}
-                    className={`text-sm p-2 rounded ${
-                      msg.isFromAdmin
-                        ? "bg-gray-100 text-gray-900"
-                        : "bg-blue-50 text-gray-900"
-                    }`}
-                  >
-                    <p className="text-xs font-medium mb-1">
-                      {msg.isFromAdmin ? "Admin" : "User"}
-                    </p>
-                    <p>{msg.message}</p>
-                  </div>
-                ))}
+              <div className="space-y-3 max-h-96 overflow-y-auto">
+                {conv.messages
+                  .sort((a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+                  .map((msg: any) => (
+                    <div
+                      key={msg.id}
+                      className={`text-sm p-3 rounded border-l-4 ${
+                        msg.isFromAdmin
+                          ? "bg-gray-50 border-gray-300 text-gray-900"
+                          : "bg-blue-50 border-blue-300 text-gray-900"
+                      }`}
+                    >
+                      <div className="flex justify-between items-start">
+                        <p className="text-xs font-semibold mb-1">
+                          {msg.isFromAdmin ? "👨‍💼 Admin" : "👤 " + (conv.user.name || "User")}
+                        </p>
+                        <span className="text-xs text-gray-500">
+                          {formatTime(msg.createdAt)}
+                        </span>
+                      </div>
+                      <p className="text-sm">{msg.message}</p>
+                    </div>
+                  ))}
               </div>
             </div>
           ))}

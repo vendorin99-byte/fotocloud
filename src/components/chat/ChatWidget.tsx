@@ -30,7 +30,7 @@ export function ChatWidget() {
   useEffect(() => {
     if (open) {
       fetchMessages();
-      const interval = setInterval(fetchMessages, 2000); // Poll every 2 sec
+      const interval = setInterval(fetchMessages, 2000);
       return () => clearInterval(interval);
     }
   }, [open]);
@@ -59,6 +59,13 @@ export function ChatWidget() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const formatTime = (date: string) => {
+    return new Date(date).toLocaleTimeString("id-ID", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   return (
@@ -106,7 +113,12 @@ export function ChatWidget() {
                         : "bg-blue-600 text-white"
                     }`}
                   >
-                    {msg.message}
+                    <p>{msg.message}</p>
+                    <p className={`text-xs mt-1 ${
+                      msg.isFromAdmin ? "text-gray-700" : "text-blue-100"
+                    }`}>
+                      {formatTime(msg.createdAt)}
+                    </p>
                   </div>
                 </div>
               ))
