@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "@/components/auth/SessionProvider";
+import { ChatWidget } from "@/components/chat/ChatWidget";
 
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
 
@@ -19,7 +20,10 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${geist.variable} h-full`}>
       <body className="min-h-full bg-white text-gray-900 antialiased">
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider>
+          {children}
+          <ChatWidget />
+        </SessionProvider>
       </body>
     </html>
   );
