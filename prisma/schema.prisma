@@ -77,6 +77,7 @@ model User {
   sessions      Session[]
   projects      Project[]
   subscriptions Subscription[]
+  chatMessages  ChatMessage[]
 }
 
 // ─── Subscription ─────────────────────────────────────────────────────────────
@@ -152,9 +153,9 @@ model Testimonial {
 model AppSettings {
   id              String @id @default("default")
   // Pro pricing per period (in IDR)
-  pro1MonthPrice  Int    @default(15000)   // Rp 15.000
-  pro3MonthPrice  Int    @default(39000)   // Rp 39.000
-  pro12MonthPrice Int    @default(149000)  // Rp 149.000
+  pro1MonthPrice  Int    @default(9900)    // Rp 9.9K
+  pro3MonthPrice  Int    @default(27000)   // Rp 27K
+  pro12MonthPrice Int    @default(99000)   // Rp 99K
   // Trial
   trialDays       Int    @default(7)       // 7-day trial
   // Limits
@@ -251,4 +252,20 @@ model Comment {
   accessToken   AccessToken @relation(fields: [accessTokenId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
+}
+
+// ─── Live Chat ────────────────────────────────────────────────────────────────
+model ChatMessage {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  message   String   @db.Text
+  isFromAdmin Boolean @default(false)  // true if message from admin
+  isRead    Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
 }
