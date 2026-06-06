@@ -1,59 +1,59 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { hashToken } from "@/lib/tokens";
 import bcrypt from "bcryptjs";
-import crypto from "crypto";
 import { z } from "zod";
 
-const schema = z.object({
+const resetSchema = z.object({
   token: z.string(),
+  email: z.string().email(),
   password: z.string().min(8),
 });
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { token, password } = schema.parse(body);
+    const { token, email, password } = resetSchema.parse(body);
 
-    // Find user by reset token
-    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
-
-    const user = await prisma.user.findFirst({
-      where: {
-        AND: [
-          { resetToken: hashedToken },
-          { resetTokenExpiry: { gt: new Date() } }, // Token not expired
-        ],
-      },
+    const hashedToken = hashToken(token);
+    const user = await prisma.user.findUnique({
+      where: { email },
     });
 
-    if (!user) {
+    if (
+      !user ||
+      user.resetToken !== hashedToken ||
+      !user.resetTokenExpiry ||
+      user.resetTokenExpiry < new Date()
+    ) {
       return NextResponse.json(
-        { error: "Link reset password sudah expired atau tidak valid" },
+        { error: "Invalid atau expired reset token" },
         { status: 400 }
       );
     }
 
     // Hash new password
-    const hashed = await bcrypt.hash(password, 12);
+    const hashedPassword = await bcrypt.hash(password, 12);
 
     // Update password and clear reset token
     await prisma.user.update({
       where: { id: user.id },
       data: {
-        password: hashed,
+        password: hashedPassword,
         resetToken: null,
         resetTokenExpiry: null,
       },
     });
 
     return NextResponse.json({
-      message: "Password berhasil direset",
+      message: "Password berhasil di-reset",
       success: true,
     });
   } catch (err) {
     if (err instanceof z.ZodError) {
       return NextResponse.json({ error: err.issues }, { status: 400 });
     }
+    console.error("Reset password error:", err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

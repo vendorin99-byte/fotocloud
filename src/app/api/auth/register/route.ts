@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { sendVerificationEmail } from "@/lib/email";
-import crypto from "crypto";
+import { generateToken, hashToken, getTokenExpiry } from "@/lib/tokens";
 
 const schema = z.object({
   name: z.string().min(2),
@@ -41,18 +41,26 @@ export async function POST(req: Request) {
         businessName: data.businessName,
         plan: "free",
         trialEndsAt,
-        // Store hashed token for verification
-        resetToken: hashedVerifyToken, // Reusing this field temporarily for email verification
-        resetTokenExpiry: verifyTokenExpiry,
       },
       select: { id: true, email: true, name: true },
     });
 
+    // Create verification token
+    const verifyToken = generateToken();
+    const hashedVerifyToken = hashToken(verifyToken);
+    const verifyTokenExpiry = getTokenExpiry(24);
+
+    await prisma.verificationToken.create({
+      data: {
+        identifier: user.email!,
+        token: hashedVerifyToken,
+        expires: verifyTokenExpiry,
+      },
+    });
+
     // Send verification email
-    const verifyUrl = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${verifyToken}`;
-    if (user.email) {
-      await sendVerificationEmail(user.email, verifyUrl);
-    }
+    const verifyUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/verify-email?token=${verifyToken}&email=${encodeURIComponent(user.email!)}`;
+    await sendVerificationEmail(user.email!, verifyUrl);
 
     return NextResponse.json(
       {
