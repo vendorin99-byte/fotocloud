@@ -206,15 +206,25 @@ model MediaItem {
   sortOrder Int     @default(0)
   isHidden  Boolean @default(false)
 
+  // Photo sales
+  price       Int?    // IDR, null = not for sale, 0 = free
+  isForSale   Boolean @default(false)
+  category    String? // "wedding" | "portrait" | "landscape" etc
+  displayName String? // Display name untuk marketplace (beda dari file name)
+
   projectId String
   project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
-  reviews  MediaReview[]
-  comments Comment[]
+  reviews     MediaReview[]
+  comments    Comment[]
+  purchases   Purchase[]
+  photoReviews PhotoReview[]
 
   @@unique([projectId, driveFileId])
+  @@index([isForSale])
+  @@index([category])
 }
 
 // ─── Media Review (status per media × access token) ──────────────────────────
@@ -268,4 +278,55 @@ model ChatMessage {
 
   @@index([userId])
   @@index([createdAt])
+}
+
+// ─── Photo Purchase (marketplace) ─────────────────────────────────────────────
+model Purchase {
+  id              String   @id @default(cuid())
+
+  // Buyer info
+  buyerEmail      String
+  buyerName       String?
+
+  // Photo info
+  mediaItemId     String
+  mediaItem       MediaItem @relation(fields: [mediaItemId], references: [id], onDelete: Cascade)
+
+  // Payment
+  amount          Int      // IDR price at time of purchase
+  paymentMethod   String   @default("midtrans") // midtrans | etc
+  midtransOrderId String?  @unique
+  status          String   @default("pending") // pending | paid | failed
+
+  // Download tracking
+  downloadCount   Int      @default(0)
+  lastDownloadedAt DateTime?
+  expiresAt       DateTime? // download expires after X days (optional)
+
+  createdAt DateTime @default(now())
+  paidAt    DateTime?
+
+  @@index([buyerEmail])
+  @@index([mediaItemId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ─── Photo Review (rating dari pembeli) ───────────────────────────────────────
+model PhotoReview {
+  id          String   @id @default(cuid())
+
+  mediaItemId String
+  mediaItem   MediaItem @relation(fields: [mediaItemId], references: [id], onDelete: Cascade)
+
+  buyerEmail  String
+  buyerName   String?
+  rating      Int      @default(5) // 1-5 stars
+  comment     String?  @db.Text
+
+  createdAt DateTime @default(now())
+
+  @@unique([mediaItemId, buyerEmail])
+  @@index([mediaItemId])
+  @@index([rating])
 }

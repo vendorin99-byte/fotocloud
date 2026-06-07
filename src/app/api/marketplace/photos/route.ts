@@ -1,0 +1,90 @@
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+
+export async function GET(req: NextRequest) {
+  try {
+    const searchParams = req.nextUrl.searchParams;
+    const category = searchParams.get("category");
+    const photographerId = searchParams.get("photographerId");
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = 12;
+    const skip = (page - 1) * limit;
+
+    // Build filter
+    const where: any = {
+      isForSale: true,
+      project: {
+        photographer: {
+          plan: { not: "free" }, // Only from paid photographers
+        },
+      },
+    };
+
+    if (category) {
+      where.category = category;
+    }
+
+    if (photographerId) {
+      where.project = {
+        ...where.project,
+        photographerId,
+      };
+    }
+
+    // Get photos
+    const photos = await prisma.mediaItem.findMany({
+      where,
+      include: {
+        project: {
+          select: {
+            id: true,
+            name: true,
+            photographer: {
+              select: {
+                id: true,
+                name: true,
+                businessName: true,
+              },
+            },
+          },
+        },
+        photoReviews: {
+          select: {
+            rating: true,
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: limit,
+    });
+
+    // Get total count
+    const total = await prisma.mediaItem.count({ where });
+
+    // Calculate average rating
+    const photosWithRating = photos.map((photo) => {
+      const avgRating =
+        photo.photoReviews.length > 0
+          ? photo.photoReviews.reduce((sum, r) => sum + r.rating, 0) /
+            photo.photoReviews.length
+          : null;
+
+      return {
+        ...photo,
+        averageRating: avgRating,
+        reviewCount: photo.photoReviews.length,
+      };
+    });
+
+    return NextResponse.json({
+      photos: photosWithRating,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+    });
+  } catch (err) {
+    console.error("Marketplace error:", err);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
+  }
+}
