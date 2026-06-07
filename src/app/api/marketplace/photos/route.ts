@@ -12,21 +12,17 @@ export async function GET(req: NextRequest) {
 
     // Build filter
     const where: any = {
-      isForSale: true,
-      project: {
-        photographer: {
-          plan: { not: "free" }, // Only from paid photographers
-        },
-      },
+      isHidden: false,
     };
 
+    // Add category filter if provided
     if (category) {
       where.category = category;
     }
 
+    // Add photographer filter if provided
     if (photographerId) {
       where.project = {
-        ...where.project,
         photographerId,
       };
     }

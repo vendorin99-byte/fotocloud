@@ -61,12 +61,20 @@ export default function MarketplacePage() {
       params.append('page', page.toString());
 
       const res = await fetch(`/api/marketplace/photos?${params}`);
+      if (!res.ok) {
+        console.error('API error:', res.status);
+        setPhotos([]);
+        setTotalPages(1);
+        return;
+      }
       const data: PaginatedResponse = await res.json();
 
-      setPhotos(data.photos);
-      setTotalPages(data.totalPages);
+      setPhotos(data.photos || []);
+      setTotalPages(data.totalPages || 1);
     } catch (err) {
       console.error('Fetch error:', err);
+      setPhotos([]);
+      setTotalPages(1);
     } finally {
       setLoading(false);
     }
