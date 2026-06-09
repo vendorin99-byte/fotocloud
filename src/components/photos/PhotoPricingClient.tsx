@@ -58,7 +58,7 @@ export default function PhotoPricingClient({ photos: initialPhotos }: PhotoPrici
     setSuccess(null);
 
     try {
-      const res = await fetch(`/api/photos/${photo.id}/update-price`, {
+      const res = await fetch(`/api/photos/Rp {photo.id}/update-price`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -93,7 +93,7 @@ export default function PhotoPricingClient({ photos: initialPhotos }: PhotoPrici
 
     setSaving(photo.id);
     try {
-      const res = await fetch(`/api/photos/${photo.id}/update-price`, {
+      const res = await fetch(`/api/photos/Rp {photo.id}/update-price`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -120,7 +120,7 @@ export default function PhotoPricingClient({ photos: initialPhotos }: PhotoPrici
       <div className="flex gap-2">
         <button
           onClick={() => setFilter('all')}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+          className={`px-4 py-2 rounded-lg font-medium transition-colors Rp {
             filter === 'all'
               ? 'bg-blue-600 text-white'
               : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300'
@@ -130,7 +130,7 @@ export default function PhotoPricingClient({ photos: initialPhotos }: PhotoPrici
         </button>
         <button
           onClick={() => setFilter('forsale')}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+          className={`px-4 py-2 rounded-lg font-medium transition-colors Rp {
             filter === 'forsale'
               ? 'bg-blue-600 text-white'
               : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300'
@@ -140,7 +140,7 @@ export default function PhotoPricingClient({ photos: initialPhotos }: PhotoPrici
         </button>
         <button
           onClick={() => setFilter('notsale')}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+          className={`px-4 py-2 rounded-lg font-medium transition-colors Rp {
             filter === 'notsale'
               ? 'bg-blue-600 text-white'
               : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300'
@@ -240,7 +240,7 @@ export default function PhotoPricingClient({ photos: initialPhotos }: PhotoPrici
                         type="number"
                         value={photo.price || ''}
                         onChange={(e) => handlePriceChange(photo.id, e.target.value)}
-                        placeholder="0"
+                        placeholder="Rp 0"
                         min="0"
                         className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
                       />
@@ -248,7 +248,7 @@ export default function PhotoPricingClient({ photos: initialPhotos }: PhotoPrici
                     <button
                       onClick={() => toggleForSale(photo)}
                       disabled={saving === photo.id}
-                      className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors Rp {
                         photo.isForSale
                           ? 'bg-green-100 text-green-700 hover:bg-green-200'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -263,7 +263,7 @@ export default function PhotoPricingClient({ photos: initialPhotos }: PhotoPrici
                 <button
                   onClick={() => handleSave(photo)}
                   disabled={saving === photo.id}
-                  className={`w-full py-2 rounded-lg font-medium text-sm transition-colors flex items-center justify-center gap-2 ${
+                  className={`w-full py-2 rounded-lg font-medium text-sm transition-colors flex items-center justify-center gap-2 Rp {
                     success === photo.id
                       ? 'bg-green-600 text-white'
                       : 'bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50'
