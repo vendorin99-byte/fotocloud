@@ -91,21 +91,47 @@ export default function MarketplacePage() {
     .reduce((sum, p) => sum + (p.price || 0), 0);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white text-gray-900">
+      {/* Navbar */}
+      <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 font-bold text-gray-900">
+            <div className="w-7 h-7 bg-gray-900 rounded-lg flex items-center justify-center">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            FotoCloud
+          </Link>
+          <div className="hidden md:flex items-center gap-7 text-sm text-gray-600">
+            <Link href="/" className="hover:text-gray-900 transition-colors">Beranda</Link>
+            <Link href="/marketplace" className="text-gray-900 font-medium">Marketplace</Link>
+            <Link href="/pricing" className="hover:text-gray-900 transition-colors">Harga</Link>
+          </div>
+          <div className="flex items-center gap-3">
+            <Link href="/login" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">Login</Link>
+            <Link href="/register" className="bg-gray-900 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+              Mulai Gratis
+            </Link>
+          </div>
+        </div>
+      </nav>
+
       {/* Header */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold text-gray-900">FotoCloud Marketplace</h1>
-          <p className="text-gray-600 mt-1">Temukan dan beli foto berkualitas tinggi</p>
+      <div className="bg-gradient-to-b from-gray-50 to-white border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-6 py-12">
+          <h1 className="text-4xl font-bold text-gray-900">Marketplace Foto</h1>
+          <p className="text-gray-600 mt-2 text-lg">Temukan dan beli foto berkualitas tinggi dari fotografer profesional</p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="flex gap-8">
           {/* Main Content */}
           <div className="flex-1">
             {/* Filter */}
-            <div className="mb-8 flex gap-4 flex-wrap">
+            <div className="mb-8 flex gap-2 flex-wrap">
               {categories.map((cat) => (
                 <button
                   key={cat.value}
@@ -115,8 +141,8 @@ export default function MarketplacePage() {
                   }}
                   className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                     category === cat.value
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-300'
+                      ? 'bg-gray-900 text-white'
+                      : 'bg-white text-gray-700 border border-gray-300 hover:border-gray-400'
                   }`}
                 >
                   {cat.label}
@@ -164,7 +190,7 @@ export default function MarketplacePage() {
                         }}
                         className={`absolute top-2 right-2 p-2 rounded-lg transition-colors ${
                           cart.includes(photo.id)
-                            ? 'bg-blue-600 text-white'
+                            ? 'bg-gray-900 text-white'
                             : 'bg-white text-gray-700 hover:bg-gray-100'
                         }`}
                       >
@@ -276,7 +302,7 @@ export default function MarketplacePage() {
                     </div>
                     <Link
                       href={`/marketplace/checkout?photos=${cart.join(',')}`}
-                      className="block w-full bg-blue-600 text-white py-3 rounded-lg font-medium text-center hover:bg-blue-700 transition-colors"
+                      className="block w-full bg-gray-900 text-white py-3 rounded-lg font-medium text-center hover:bg-gray-800 transition-colors"
                     >
                       Lanjut Checkout
                     </Link>
@@ -351,8 +377,8 @@ export default function MarketplacePage() {
                   }}
                   className={`w-full py-3 rounded-lg font-medium transition-colors ${
                     cart.includes(selectedPhoto.id)
-                      ? 'bg-red-600 text-white hover:bg-red-700'
-                      : 'bg-blue-600 text-white hover:bg-blue-700'
+                      ? 'bg-gray-300 text-gray-900 hover:bg-gray-400'
+                      : 'bg-gray-900 text-white hover:bg-gray-800'
                   }`}
                 >
                   {cart.includes(selectedPhoto.id) ? 'Hapus dari Keranjang' : 'Tambah ke Keranjang'}

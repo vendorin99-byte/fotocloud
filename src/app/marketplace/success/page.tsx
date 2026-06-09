@@ -31,7 +31,7 @@ function SuccessContent() {
         <div className="space-y-3">
           <Link
             href="/marketplace/downloads"
-            className="block bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+            className="block bg-gray-900 text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
           >
             <Download size={18} />
             Lihat Download
@@ -44,7 +44,7 @@ function SuccessContent() {
           </Link>
         </div>
 
-        <div className="mt-8 p-4 bg-blue-50 rounded-lg">
+        <div className="mt-8 p-4 bg-gray-50 rounded-lg">
           <p className="text-sm text-blue-900">
             📧 Link download juga telah dikirim ke email Anda. Periksa spam jika tidak ditemukan.
           </p>

@@ -116,7 +116,7 @@ function CheckoutContent() {
     return (
       <div className="text-center py-12">
         <p className="text-gray-500 mb-4">Foto tidak ditemukan</p>
-        <Link href="/marketplace" className="text-blue-600 hover:underline">
+        <Link href="/marketplace" className="text-gray-900 hover:underline">
           Kembali ke Marketplace
         </Link>
       </div>
@@ -128,7 +128,7 @@ function CheckoutContent() {
       {/* Header */}
       <div className="bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 py-6 flex items-center gap-4">
-          <Link href="/marketplace" className="text-blue-600 hover:text-blue-700">
+          <Link href="/marketplace" className="text-gray-900 hover:text-gray-700">
             <ArrowLeft size={20} />
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Checkout</h1>
@@ -178,7 +178,7 @@ function CheckoutContent() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors"
+                className="w-full mt-6 bg-gray-900 text-white py-3 rounded-lg font-medium hover:bg-gray-800 disabled:opacity-50 transition-colors"
               >
                 {submitting ? 'Memproses...' : 'Lanjut Pembayaran'}
               </button>

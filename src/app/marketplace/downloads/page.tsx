@@ -36,7 +36,7 @@ export default function DownloadsPage() {
       {/* Header */}
       <div className="bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 py-6 flex items-center gap-4">
-          <Link href="/marketplace" className="text-blue-600 hover:text-blue-700">
+          <Link href="/marketplace" className="text-gray-900 hover:text-gray-700">
             <ArrowLeft size={20} />
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Download Foto</h1>
@@ -63,7 +63,7 @@ export default function DownloadsPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50"
+                className="w-full bg-gray-900 text-white py-2 rounded-lg font-medium hover:bg-gray-800 disabled:opacity-50"
               >
                 {loading ? 'Mencari...' : 'Cari'}
               </button>
@@ -77,7 +77,7 @@ export default function DownloadsPage() {
               </h2>
               <button
                 onClick={() => setSearched(false)}
-                className="text-blue-600 hover:text-blue-700"
+                className="text-gray-900 hover:text-gray-700"
               >
                 Cari Pesanan Lain
               </button>
@@ -111,7 +111,7 @@ export default function DownloadsPage() {
                       href={download.mediaItem.downloadUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 flex items-center gap-2"
+                      className="bg-gray-900 text-white px-4 py-2 rounded-lg font-medium hover:bg-gray-800 flex items-center gap-2"
                     >
                       <Download size={16} />
                       Download
@@ -126,7 +126,7 @@ export default function DownloadsPage() {
             <p className="text-gray-500 mb-4">Tidak ada pesanan ditemukan</p>
             <button
               onClick={() => setSearched(false)}
-              className="text-blue-600 hover:text-blue-700"
+              className="text-gray-900 hover:text-gray-700"
             >
               Coba Email Lain
             </button>
