@@ -180,11 +180,13 @@ export default function PhotoPricingClient({ photos: initialPhotos }: PhotoPrici
 
               {/* Info */}
               <div className="p-4 space-y-4">
-                {/* Project Name */}
-                <div>
-                  <p className="text-xs text-gray-500 uppercase">Proyek</p>
-                  <p className="font-medium text-gray-900">{photo.projectName}</p>
-                </div>
+                {/* Project Name - only show if from Drive */}
+                {photo.driveFileId && (
+                  <div>
+                    <p className="text-xs text-gray-500 uppercase">Proyek</p>
+                    <p className="font-medium text-gray-900">{photo.projectName}</p>
+                  </div>
+                )}
 
                 {/* File Name */}
                 <div>
@@ -235,14 +237,14 @@ export default function PhotoPricingClient({ photos: initialPhotos }: PhotoPrici
                   </label>
                   <div className="flex gap-2">
                     <div className="relative flex-1">
-                      <DollarSign size={16} className="absolute left-3 top-3 text-gray-400" />
+                      <span className="absolute left-3 top-2.5 text-gray-400 text-sm font-medium">Rp</span>
                       <input
                         type="number"
                         value={photo.price || ''}
                         onChange={(e) => handlePriceChange(photo.id, e.target.value)}
-                        placeholder="Rp 0"
+                        placeholder="0"
                         min="0"
-                        className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
                       />
                     </div>
                     <button
