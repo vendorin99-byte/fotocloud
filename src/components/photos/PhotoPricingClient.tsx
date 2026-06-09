@@ -13,6 +13,7 @@ interface Photo {
   category: string | null;
   thumbnailUrl: string | null;
   projectName: string;
+  driveFileId: string | null;
 }
 
 interface PhotoPricingClientProps {
