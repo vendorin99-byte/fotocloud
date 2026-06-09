@@ -3,6 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { UpgradeButton } from "@/components/subscription/UpgradeButton";
+import { WalletCard } from "@/components/dashboard/WalletCard";
 
 const syncBadge: Record<string, { label: string; cls: string }> = {
   pending:  { label: "PENDING",  cls: "bg-gray-100 text-gray-500" },
@@ -80,6 +81,11 @@ export default async function DashboardPage() {
       )}
 
       {/* Upgrade Banner */}
+
+      {/* Wallet Card */}
+      <div className="mb-8">
+        <WalletCard />
+      </div>
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
