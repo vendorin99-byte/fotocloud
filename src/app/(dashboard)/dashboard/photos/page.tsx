@@ -3,6 +3,7 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import PhotoPricingClient from '@/components/photos/PhotoPricingClient';
+import { PhotoUploadSection } from '@/components/photos/PhotoUploadSection';
 
 export default async function PhotosPage() {
   const session = await getServerSession(authOptions);
