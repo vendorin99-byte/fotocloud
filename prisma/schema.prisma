@@ -195,7 +195,7 @@ model AccessToken {
 
 model MediaItem {
   id          String @id @default(cuid())
-  driveFileId String
+  driveFileId String?
   name        String
   mimeType    String
   type        String // "photo" | "video" | "other"
@@ -228,7 +228,7 @@ model MediaItem {
   purchases   Purchase[]
   photoReviews PhotoReview[]
 
-  @@unique([projectId, driveFileId])
+  @@unique([projectId, driveFileId], where: { driveFileId: { not: null } })
   @@index([isForSale])
   @@index([category])
 }
