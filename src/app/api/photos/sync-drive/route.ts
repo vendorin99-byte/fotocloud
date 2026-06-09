@@ -63,6 +63,7 @@ export async function POST(req: NextRequest) {
         category: data.category || null,
         price: data.price,
         isForSale: true,
+        type: "photo",
         thumbnailUrl,
         webViewUrl: `https://drive.google.com/file/d/${fileId}/view`,
         downloadUrl,

@@ -70,6 +70,7 @@ export async function POST(req: NextRequest) {
         category: category || null,
         price,
         isForSale: true,
+        type: "photo",
         thumbnailUrl: uploadData.secure_url,
         webViewUrl: uploadData.secure_url,
         downloadUrl: uploadData.secure_url,
