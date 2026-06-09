@@ -10,9 +10,13 @@ export async function GET(req: NextRequest) {
     const limit = 12;
     const skip = (page - 1) * limit;
 
-    // Build filter
+    // Build filter - only photos marked for sale
     const where: any = {
       isHidden: false,
+      isForSale: true,
+      price: {
+        gt: 0,
+      },
     };
 
     // Add category filter if provided
@@ -58,7 +62,7 @@ export async function GET(req: NextRequest) {
     // Get total count
     const total = await prisma.mediaItem.count({ where });
 
-    // Calculate average rating
+    // Calculate average rating and sanitize BigInt
     const photosWithRating = photos.map((photo) => {
       const avgRating =
         photo.photoReviews.length > 0
@@ -67,9 +71,15 @@ export async function GET(req: NextRequest) {
           : null;
 
       return {
-        ...photo,
+        id: photo.id,
+        name: photo.name,
+        displayName: photo.displayName,
+        price: photo.price,
+        thumbnailUrl: photo.thumbnailUrl,
+        category: photo.category,
         averageRating: avgRating,
         reviewCount: photo.photoReviews.length,
+        project: photo.project,
       };
     });
 
