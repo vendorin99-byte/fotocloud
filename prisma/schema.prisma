@@ -228,7 +228,7 @@ model MediaItem {
   purchases   Purchase[]
   photoReviews PhotoReview[]
 
-  @@unique([projectId, driveFileId], where: { driveFileId: { not: null } })
+  @@unique([projectId, driveFileId])
   @@index([isForSale])
   @@index([category])
 }
