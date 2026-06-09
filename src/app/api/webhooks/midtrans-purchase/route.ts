@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import {
+  sendPurchaseConfirmationEmail,
+  sendPaymentReceivedNotificationEmail,
+} from "@/lib/email";
 
 // Midtrans webhook for photo purchases
 export async function POST(req: NextRequest) {
@@ -110,7 +114,51 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      // TODO: Send purchase confirmation email
+      // Send emails
+      const totalAmount = purchases.reduce((sum, p) => sum + p.amount, 0);
+      const totalCommission = Math.floor(
+        (totalAmount * (config?.photographerPercent || 80)) / 100
+      );
+
+      // Email to buyer
+      await sendPurchaseConfirmationEmail(
+        buyerEmail,
+        buyerName || "Pembeli",
+        orderId,
+        totalAmount,
+        purchases.length,
+        `${process.env.NEXT_PUBLIC_APP_URL || "https://fotocloud-iota.vercel.app"}/marketplace/downloads`
+      );
+
+      // Email to photographers (for each unique photographer in purchases)
+      const photographerIds = new Set<string>();
+      for (const purchase of purchases) {
+        const mediaItem = await prisma.mediaItem.findUnique({
+          where: { id: purchase.mediaItemId },
+          include: { project: { select: { photographerId: true } } },
+        });
+        if (mediaItem) {
+          photographerIds.add(mediaItem.project.photographerId);
+        }
+      }
+
+      for (const photogId of photographerIds) {
+        const photographer = await prisma.user.findUnique({
+          where: { id: photogId },
+          select: { email: true, name: true },
+        });
+        if (photographer?.email) {
+          const photogAmount = totalCommission;
+          await sendPaymentReceivedNotificationEmail(
+            photographer.email,
+            photographer.name || "Fotografer",
+            totalAmount,
+            photogAmount,
+            purchases.length
+          );
+        }
+      }
+
       console.log(`[Purchase confirmed] ${buyerEmail} - ${orderId}`);
     }
 

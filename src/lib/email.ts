@@ -205,3 +205,157 @@ export async function sendPaymentReceiptEmail(
     `,
   });
 }
+
+// ─── Marketplace & Purchase Emails ─────────────────────────────────────────
+
+export async function sendPurchaseConfirmationEmail(
+  buyerEmail: string,
+  buyerName: string,
+  orderId: string,
+  totalAmount: number,
+  photoCount: number,
+  downloadUrl: string
+) {
+  return sendEmail({
+    to: buyerEmail,
+    subject: "✓ Pembelian Berhasil - FotoCloud Marketplace",
+    html: `
+      <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
+        <div style="background:#10b981;padding:20px;text-align:center;border-radius:8px 8px 0 0;color:white">
+          <h2 style="margin:0">✓ Pembayaran Berhasil!</h2>
+        </div>
+        <div style="padding:20px;background:#f9fafb">
+          <p>Halo ${buyerName},</p>
+          <p>Terima kasih! Pembelian foto Anda sudah diproses.</p>
+
+          <div style="background:white;padding:16px;border:1px solid #e5e7eb;border-radius:8px;margin:16px 0;font-size:13px">
+            <p><strong>Order ID:</strong> ${orderId}</p>
+            <p><strong>Jumlah Foto:</strong> ${photoCount}</p>
+            <p><strong>Total Harga:</strong> Rp ${totalAmount.toLocaleString("id-ID")}</p>
+          </div>
+
+          <p>Foto Anda siap diunduh:</p>
+          <div style="text-align:center;margin:20px 0">
+            <a href="${downloadUrl}" style="background:#111827;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block;font-weight:bold">
+              Lihat & Download Foto
+            </a>
+          </div>
+
+          <p style="color:#6b7280;font-size:12px">
+            • Link download berlaku 7 hari<br/>
+            • Anda bisa download berkali-kali<br/>
+            • Pertanyaan? Reply email ini
+          </p>
+        </div>
+      </div>
+    `,
+  });
+}
+
+export async function sendPaymentReceivedNotificationEmail(
+  photographerEmail: string,
+  photographerName: string,
+  amount: number,
+  commission: number,
+  photoCount: number
+) {
+  return sendEmail({
+    to: photographerEmail,
+    subject: "💰 Ada Pembayaran Masuk - FotoCloud",
+    html: `
+      <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
+        <div style="background:#3b82f6;padding:20px;text-align:center;border-radius:8px 8px 0 0;color:white">
+          <h2 style="margin:0">💰 Pembayaran Masuk!</h2>
+        </div>
+        <div style="padding:20px;background:#f9fafb">
+          <p>Halo ${photographerName},</p>
+          <p>Ada pembayaran baru dari pembeli di marketplace Anda!</p>
+
+          <div style="background:white;padding:16px;border:1px solid #e5e7eb;border-radius:8px;margin:16px 0;font-size:13px">
+            <p><strong>Jumlah Foto Terjual:</strong> ${photoCount}</p>
+            <p><strong>Total Harga:</strong> Rp ${amount.toLocaleString("id-ID")}</p>
+            <p style="color:#10b981;font-weight:bold;font-size:16px">
+              Komisi Anda: Rp ${commission.toLocaleString("id-ID")} (80%)
+            </p>
+          </div>
+
+          <p>Saldo Anda sudah ditambahkan. Lihat detail di dashboard:</p>
+          <div style="text-align:center;margin:20px 0">
+            <a href="https://fotocloud-iota.vercel.app/dashboard" style="background:#111827;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block;font-weight:bold">
+              Lihat Wallet
+            </a>
+          </div>
+        </div>
+      </div>
+    `,
+  });
+}
+
+export async function sendPayoutApprovedEmail(
+  photographerEmail: string,
+  photographerName: string,
+  amount: number
+) {
+  return sendEmail({
+    to: photographerEmail,
+    subject: "✓ Penarikan Dana Disetujui - FotoCloud",
+    html: `
+      <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
+        <div style="background:#10b981;padding:20px;text-align:center;border-radius:8px 8px 0 0;color:white">
+          <h2 style="margin:0">✓ Penarikan Disetujui</h2>
+        </div>
+        <div style="padding:20px;background:#f9fafb">
+          <p>Halo ${photographerName},</p>
+          <p>Permintaan penarikan dana Anda telah disetujui oleh admin FotoCloud.</p>
+
+          <div style="background:white;padding:16px;border:1px solid #e5e7eb;border-radius:8px;margin:16px 0;font-size:13px">
+            <p><strong>Jumlah Penarikan:</strong> Rp ${amount.toLocaleString("id-ID")}</p>
+            <p><strong>Status:</strong> Sedang diproses ke rekening Anda</p>
+          </div>
+
+          <p style="color:#6b7280;font-size:13px">
+            Dana akan ditransfer ke rekening Anda dalam 1-2 hari kerja. Pastikan data rekening Anda sudah benar.
+          </p>
+        </div>
+      </div>
+    `,
+  });
+}
+
+export async function sendPayoutRejectedEmail(
+  photographerEmail: string,
+  photographerName: string,
+  amount: number,
+  reason: string
+) {
+  return sendEmail({
+    to: photographerEmail,
+    subject: "ℹ️ Penarikan Dana Ditolak - FotoCloud",
+    html: `
+      <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
+        <div style="background:#ef4444;padding:20px;text-align:center;border-radius:8px 8px 0 0;color:white">
+          <h2 style="margin:0">ℹ️ Penarikan Ditolak</h2>
+        </div>
+        <div style="padding:20px;background:#f9fafb">
+          <p>Halo ${photographerName},</p>
+          <p>Permintaan penarikan dana Anda telah ditolak oleh admin.</p>
+
+          <div style="background:white;padding:16px;border:1px solid #e5e7eb;border-radius:8px;margin:16px 0;font-size:13px">
+            <p><strong>Jumlah Penarikan:</strong> Rp ${amount.toLocaleString("id-ID")}</p>
+            <p><strong>Alasan Penolakan:</strong> ${reason || "Tidak ada keterangan"}</p>
+          </div>
+
+          <p style="color:#6b7280;font-size:13px">
+            Dana tetap berada di wallet Anda. Silakan cek email penolakan atau hubungi support untuk informasi lebih lanjut.
+          </p>
+
+          <p style="text-align:center;margin-top:20px">
+            <a href="https://fotocloud-iota.vercel.app/dashboard" style="color:#3b82f6;text-decoration:none;font-weight:bold">
+              Lihat Wallet Anda
+            </a>
+          </p>
+        </div>
+      </div>
+    `,
+  });
+}

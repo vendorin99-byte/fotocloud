@@ -11,8 +11,15 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // TODO: Check if user is admin (add admin flag to User model later)
-    // For now, allow all authenticated users (update this!)
+    // Check if user is admin
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { isAdmin: true },
+    });
+
+    if (!user?.isAdmin) {
+      return NextResponse.json({ error: "Admin access required" }, { status: 403 });
+    }
 
     const status = req.nextUrl.searchParams.get("status") || "pending";
 
