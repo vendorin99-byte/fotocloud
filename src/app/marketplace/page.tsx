@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingCart, Star } from 'lucide-react';
+import { ShoppingCart, Star, LogOut } from 'lucide-react';
+import { useSession, signOut } from 'next-auth/react';
 
 interface Photo {
   id: string;
@@ -41,6 +42,7 @@ const categories = [
 ];
 
 export default function MarketplacePage() {
+  const { data: session } = useSession();
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState('');
@@ -95,7 +97,7 @@ export default function MarketplacePage() {
       {/* Navbar */}
       <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 font-bold text-gray-900">
+          <Link href={session ? "/dashboard" : "/"} className="flex items-center gap-2 font-bold text-gray-900">
             <div className="w-7 h-7 bg-gray-900 rounded-lg flex items-center justify-center">
               <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
@@ -110,10 +112,27 @@ export default function MarketplacePage() {
             <Link href="/pricing" className="hover:text-gray-900 transition-colors">Harga</Link>
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/login" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">Login</Link>
-            <Link href="/register" className="bg-gray-900 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
-              Mulai Gratis
-            </Link>
+            {session ? (
+              <>
+                <span className="text-sm text-gray-600">{session.user?.name || session.user?.email}</span>
+                <Link href="/dashboard" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                  Dashboard
+                </Link>
+                <button
+                  onClick={() => signOut({ redirect: true, callbackUrl: "/" })}
+                  className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                >
+                  <LogOut size={16} /> Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">Login</Link>
+                <Link href="/register" className="bg-gray-900 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                  Mulai Gratis
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>
