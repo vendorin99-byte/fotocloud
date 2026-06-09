@@ -42,10 +42,73 @@ export async function POST(req: NextRequest) {
       )
     );
 
-    // If paid, send confirmation email
+    // If paid, create transactions and update balance
     if (newStatus === "paid") {
       const buyerEmail = purchases[0].buyerEmail;
       const buyerName = purchases[0].buyerName;
+
+      // Get commission config
+      const config = await prisma.commissionConfig.findUnique({
+        where: { id: "default" },
+      });
+
+      const photographerPercent = config?.photographerPercent || 80;
+
+      // Get media items and their photographers
+      for (const purchase of purchases) {
+        const mediaItem = await prisma.mediaItem.findUnique({
+          where: { id: purchase.mediaItemId },
+          include: { project: { select: { photographerId: true } } },
+        });
+
+        if (mediaItem) {
+          const photographerId = mediaItem.project.photographerId;
+          const photographerAmount = Math.floor(
+            (purchase.amount * photographerPercent) / 100
+          );
+
+          // Create transaction record
+          await prisma.transaction.create({
+            data: {
+              photographerId,
+              type: "sale",
+              amount: photographerAmount,
+              description: `Sale: ${mediaItem.displayName || mediaItem.name}`,
+              purchaseId: purchase.id,
+              status: "completed",
+            },
+          });
+
+          // Update or create photographer balance
+          const existingBalance =
+            await prisma.photographerBalance.findUnique({
+              where: { photographerId },
+            });
+
+          if (existingBalance) {
+            await prisma.photographerBalance.update({
+              where: { photographerId },
+              data: {
+                balance: {
+                  increment: photographerAmount,
+                },
+                totalEarned: {
+                  increment: photographerAmount,
+                },
+              },
+            });
+          } else {
+            await prisma.photographerBalance.create({
+              data: {
+                photographerId,
+                balance: photographerAmount,
+                totalEarned: photographerAmount,
+                totalPaidOut: 0,
+              },
+            });
+          }
+        }
+      }
 
       // TODO: Send purchase confirmation email
       console.log(`[Purchase confirmed] ${buyerEmail} - ${orderId}`);
