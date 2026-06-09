@@ -18,6 +18,7 @@ export default function LandingPage() {
           </Link>
           <div className="hidden md:flex items-center gap-7 text-sm text-gray-600">
             <Link href="#fitur" className="hover:text-gray-900 transition-colors">Fitur</Link>
+            <Link href="/marketplace" className="hover:text-gray-900 transition-colors">Marketplace</Link>
             <Link href="/pricing" className="hover:text-gray-900 transition-colors">Harga</Link>
             <Link href="#testimonial" className="hover:text-gray-900 transition-colors">Testimonial</Link>
           </div>

@@ -73,11 +73,14 @@ model User {
   resetToken     String?   @unique  // Hashed reset token
   resetTokenExpiry DateTime?  // Reset token expiry (1 hour)
 
-  accounts      Account[]
-  sessions      Session[]
-  projects      Project[]
-  subscriptions Subscription[]
-  chatMessages  ChatMessage[]
+  accounts         Account[]
+  sessions         Session[]
+  projects         Project[]
+  subscriptions    Subscription[]
+  chatMessages     ChatMessage[]
+  balance          PhotographerBalance?
+  transactions     Transaction[]
+  payoutRequests   PayoutRequest[]
 }
 
 // ─── Subscription ─────────────────────────────────────────────────────────────
@@ -306,6 +309,8 @@ model Purchase {
   createdAt DateTime @default(now())
   paidAt    DateTime?
 
+  transactions Transaction[]
+
   @@index([buyerEmail])
   @@index([mediaItemId])
   @@index([status])
@@ -330,3 +335,92 @@ model PhotoReview {
   @@index([mediaItemId])
   @@index([rating])
 }
+
+// ─── Photographer Balance & Payout ────────────────────────────────────────
+model PhotographerBalance {
+  id              String   @id @default(cuid())
+
+  photographerId  String   @unique
+  photographer    User     @relation(fields: [photographerId], references: [id], onDelete: Cascade)
+
+  balance         Int      @default(0)  // IDR, total available balance
+  totalEarned     Int      @default(0)  // IDR, total earned lifetime
+  totalPaidOut    Int      @default(0)  // IDR, total paid out
+
+  updatedAt       DateTime @updatedAt
+  createdAt       DateTime @default(now())
+}
+
+// ─── Transaction (track all money movements) ───────────────────────────────
+model Transaction {
+  id              String   @id @default(cuid())
+
+  photographerId  String
+  photographer    User     @relation(fields: [photographerId], references: [id], onDelete: Cascade)
+
+  type            String   // "sale" | "payout" | "refund"
+  amount          Int      // IDR
+  description     String?
+
+  // Related to purchase (if type = "sale")
+  purchaseId      String?
+  purchase        Purchase? @relation(fields: [purchaseId], references: [id], onDelete: SetNull)
+
+  // Related to payout (if type = "payout")
+  payoutRequestId String?
+  payoutRequest   PayoutRequest? @relation(fields: [payoutRequestId], references: [id], onDelete: SetNull)
+
+  status          String   @default("completed") // "pending" | "completed" | "failed"
+
+  createdAt       DateTime @default(now())
+
+  @@index([photographerId])
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ─── Payout Request ───────────────────────────────────────────────────────
+model PayoutRequest {
+  id              String   @id @default(cuid())
+
+  photographerId  String
+  photographer    User     @relation(fields: [photographerId], references: [id], onDelete: Cascade)
+
+  amount          Int      // IDR, amount requested
+  status          String   @default("pending") // "pending" | "approved" | "rejected" | "processing" | "completed"
+
+  bankName        String?
+  bankAccount     String?  // encrypted
+  accountHolder   String?
+
+  approvedAt      DateTime?
+  rejectedAt      DateTime?
+  completedAt     DateTime?
+  rejectionReason String?  @db.Text
+
+  transactions    Transaction[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([photographerId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ─── Commission Config ─────────────────────────────────────────────────────
+model CommissionConfig {
+  id              String   @id @default("default")
+
+  photographerPercent Int  @default(80)  // 80% to photographer
+  platformPercent     Int  @default(20)  // 20% to platform
+
+  updatedAt       DateTime @updatedAt
+}
+
+// ─── Relation updates ─────────────────────────────────────────────────────
+// Add to User model
+// balance         PhotographerBalance?
+// transactions    Transaction[]
+// payoutRequests  PayoutRequest[]
