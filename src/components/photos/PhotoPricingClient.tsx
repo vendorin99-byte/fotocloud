@@ -189,26 +189,19 @@ export default function PhotoPricingClient({ photos: initialPhotos }: PhotoPrici
                   </div>
                 )}
 
-                {/* File Name */}
+                {/* Display Name - Main editable field */}
                 <div>
                   <label className="block text-xs font-semibold text-gray-700 mb-1">
-                    Nama File
-                  </label>
-                  <p className="text-sm text-gray-600 truncate">{photo.name}</p>
-                </div>
-
-                {/* Display Name */}
-                <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">
-                    Nama Tampilan (untuk marketplace)
+                    Nama Foto
                   </label>
                   <input
                     type="text"
                     value={photo.displayName || ''}
                     onChange={(e) => handleDisplayNameChange(photo.id, e.target.value)}
-                    placeholder="Nama unik untuk marketplace..."
+                    placeholder="Kosong - isi nama foto Anda"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
                   />
+                  <p className="text-xs text-gray-500 mt-1">File asli: {photo.name}</p>
                 </div>
 
                 {/* Category */}
