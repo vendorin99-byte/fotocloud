@@ -18,9 +18,13 @@ function extractDriveFileId(url: string): string | null {
 }
 
 function extractDriveFileName(url: string): string | null {
-  // Try to extract filename from /d/ID/view URL
-  const match = url.match(/\/d\/[a-zA-Z0-9_-]+\/view\?usp=sharing&name=([^&]+)/);
-  return match ? decodeURIComponent(match[1]) : null;
+  // Extract from various Drive URL patterns
+  // Pattern 1: /d/ID/view?usp=sharing&name=filename
+  let match = url.match(/[?&]name=([^&]+)/);
+  if (match) return decodeURIComponent(match[1]);
+
+  // Pattern 2: Just use generic name based on file ID
+  return null;
 }
 
 export async function POST(req: NextRequest) {
@@ -41,23 +45,26 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Create or get project
+    // Create or get project - prioritize custom projectName
+    const projectName = data.projectName || "Marketplace Photos";
     let project = await prisma.project.findFirst({
-      where: { photographerId: session.user.id, name: data.projectName || "Marketplace Photos" },
+      where: { photographerId: session.user.id, name: projectName },
     });
 
     if (!project) {
       project = await prisma.project.create({
         data: {
           photographerId: session.user.id,
-          name: data.projectName || "Marketplace Photos",
+          name: projectName,
           description: "Photos for marketplace",
+          driveFolderId: fileId.substring(0, 20), // Use file ID as reference
         },
       });
     }
 
-    // Extract filename from URL or use displayName
-    const fileName = extractDriveFileName(data.driveLink) || data.displayName || `photo-${fileId}`;
+    // Extract filename from URL, fallback to displayName or generic name
+    const driveFileName = extractDriveFileName(data.driveLink);
+    const fileName = driveFileName || data.displayName || `Photo-${fileId.substring(0, 8)}`;
 
     // Create thumbnail URL from Google Drive
     const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`;
