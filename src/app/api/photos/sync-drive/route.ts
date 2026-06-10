@@ -62,9 +62,8 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Extract filename from URL, fallback to displayName or generic name
-    const driveFileName = extractDriveFileName(data.driveLink);
-    const fileName = driveFileName || data.displayName || `Photo-${fileId.substring(0, 8)}`;
+    // Use displayName if provided, otherwise generic name (don't auto-extract from Drive)
+    const fileName = data.displayName || `Photo-${fileId.substring(0, 8)}`;
 
     // Create thumbnail URL from Google Drive
     const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`;
